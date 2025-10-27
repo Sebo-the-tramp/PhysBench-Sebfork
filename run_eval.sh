@@ -19,7 +19,7 @@ llava-v1.6-vicuna-7b-hf
 #mPLUG-Owl3-7B-241101
 #MiniCPM-V2
 MiniCPM-V2.5
-#MiniCPM-V2.6
+MiniCPM-V2.6
 Qwen-VL-Chat
 InternVL-Chat-V1-5-quantable
 #llava-interleave-qwen-7b-hf
