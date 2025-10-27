@@ -2,12 +2,12 @@ MODELS_FULL=(
 #instructblip-flan-t5-xl
 #instructblip-flan-t5-xxl
 #instructblip-vicuna-7b
-instructblip-vicuna-13b
+#instructblip-vicuna-13b
 #blip2-flant5xxl
-llava-1.5-7b-hf
-llava-1.5-13b-hf
-llava-v1.6-mistral-7b-hf
-llava-v1.6-vicuna-7b-hf
+#llava-1.5-7b-hf
+#llava-1.5-13b-hf
+#llava-v1.6-mistral-7b-hf
+#llava-v1.6-vicuna-7b-hf
 #deepseek1B
 #deepseek7B
 #Xinyuan-VL-2B
@@ -19,9 +19,9 @@ llava-v1.6-vicuna-7b-hf
 #mPLUG-Owl3-7B-241101
 #MiniCPM-V2
 MiniCPM-V2.5
-MiniCPM-V2.6
-Qwen-VL-Chat
-InternVL-Chat-V1-5-quantable
+# MiniCPM-V2.6
+# Qwen-VL-Chat
+# InternVL-Chat-V1-5-quantable
 #llava-interleave-qwen-7b-hf
 #llava-interleave-qwen-7b-dpo-hf
 #vila-1.5-3b
@@ -33,9 +33,9 @@ InternVL-Chat-V1-5-quantable
 #paligemma2-10b
 #LLaVA-NeXT-Video-7B-DPO-hf
 #LLaVA-NeXT-Video-7B-hf
-MolmoE-1B
-MolmoE-7B-O
-MolmoE-7B-D
+# MolmoE-1B
+# MolmoE-7B-O
+# MolmoE-7B-D
 #InternVL2-1B
 #InternVL2-2B
 #InternVL2-4B
@@ -71,7 +71,7 @@ for MODEL in "${MODELS_FULL[@]}"; do
   echo "=== Processing with model $MODEL ==="
   start=$(date +%s)
   #CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 PYTHONPATH='./' python eval/test_benchmark.py --model_name $MODEL --dataset_path /mnt/proj1/eu-25-92/physbench --split test 
-  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 PYTHONPATH='./' python eval/test_benchmark.py --model_name $MODEL --dataset_path /mnt/proj1/eu-25-92/tiny_vqa_creation/output --split val
+  CUDA_VISIBLE_DEVICES=0 PYTHONPATH='./' python eval/test_benchmark.py --model_name $MODEL --dataset_path /mnt/proj1/eu-25-92/tiny_vqa_creation/output --split val
   #> /dev/null 2>&1
 
   end=$(date +%s)  
