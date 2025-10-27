@@ -1673,7 +1673,8 @@ class Owl3(QAModelInstance):
 
 class MiniCPMV(QAModelInstance):
 	def __init__(self, ckpt="openbmb/MiniCPM-V-2", torch_device=torch.device("cuda"), model_precision=torch.float32):
-		model_precision = torch.float32  # torch.bfloat16 and torch.float16 may be wrong
+		# model_precision = torch.float32  # torch.bfloat16 and torch.float16 may be wrong
+		model_precision = torch.bfloat16
 		from transformers import AutoModel, AutoTokenizer
 		self.model = AutoModel.from_pretrained(ckpt, trust_remote_code=True, torch_dtype=model_precision)
 		# For Nvidia GPUs support BF16 (like A100, H100, RTX3090)

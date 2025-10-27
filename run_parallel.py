@@ -37,6 +37,10 @@ MODELS_FULL: List[str] = [
     "MolmoE-1B",
     "MolmoE-7B-O",
 ]
+
+# one of those failed in the first 8 (maybe 2 failed even)
+# there is also one that actually answeres too much
+
 # Models that should reserve 2 GPUs. Omit for 1 GPU.
 MODEL_GPUS: Dict[str, int] = {
 }
