@@ -207,7 +207,7 @@ class PhysionBenchEvaluator():
 		return combined_image
 
 	def test(self):
-		for item in tqdm(self.dataset[:5]):
+		for item in tqdm(self.dataset):
 			prompt = item["question"] + self.end_prompt
 			visuals = [self._process_visual_path(f) for f in item["file_name"]]
 			if self.model_name in ['llava-1.5-7b-hf', 'llava-1.5-13b-hf', 'cambrian-8b',
