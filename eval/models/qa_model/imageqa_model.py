@@ -324,7 +324,7 @@ class InstructBlip(QAModelInstance):
 
 		out = self.model.generate(**inputs, max_new_tokens=200)
 		answer = self.processor.decode(out[0], skip_special_tokens=True)
-		cprint(answer[len(prompt)-2:], 'cyan')
+		cprint(answer[len(prompt):], 'cyan')
 		return answer
 
 
