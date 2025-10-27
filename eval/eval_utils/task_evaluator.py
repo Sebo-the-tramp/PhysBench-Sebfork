@@ -192,7 +192,8 @@ class PhysionBenchEvaluator():
 		if file_name.endswith(".mp4"):
 			file_path = self.dataset_path + '/video/' + file_name
 		elif file_name.endswith(".jpg") or file_name.endswith(".JPG") or file_name.endswith(".png"):
-			file_path = self.dataset_path + '/image/' + file_name
+			# file_path = self.dataset_path + '/image/' + file_name
+			file_path = file_name
 		else:
 			raise NotImplementedError
 		return file_path
