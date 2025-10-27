@@ -323,7 +323,7 @@ class InstructBlip(QAModelInstance):
 		inputs = self.processor(image, prompt, return_tensors="pt").to(self.model.device)
 
 		out = self.model.generate(**inputs, max_new_tokens=200)
-		answer = self.processor.decode(out[len(prompt)-2], skip_special_tokens=True)
+		answer = self.processor.decode(out[0][len(prompt):], skip_special_tokens=True)
 		cprint(answer, 'cyan')
 		return answer
 
