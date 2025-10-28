@@ -78,7 +78,7 @@ def main():
 
     while JOBS or running:
         print(f'Waiting: {len(JOBS)} jobs remaining, {len(running)} running')
-        
+
         # reclaim finished
         for r in running[:]:
             if r['p'].poll() is not None:
@@ -113,7 +113,7 @@ def main():
             running.append({'p': p, 'devs': devs, 'log': logf, 'job': job})
             JOBS.pop(i)
 
-        time.sleep(0.3)
+        time.sleep(5)
 
 if __name__ == '__main__':
     main()
