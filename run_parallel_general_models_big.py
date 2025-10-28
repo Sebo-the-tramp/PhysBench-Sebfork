@@ -14,10 +14,10 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 # maybe it works with 1 image but not with 8 images?
 JOBS = [
     {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2-40B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-    {'model':'InternVL2-76B','g':8,'mb':120000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
     {'model':'InternVL2_5-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2_5-38B','g':4,'mb':28000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2_5-38B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
     {'model':'InternVL2_5-78B','g':8,'mb':125000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
 
