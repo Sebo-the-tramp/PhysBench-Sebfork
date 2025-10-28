@@ -11,7 +11,8 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
-JOBS = [
+JOBS = [    
+    # All these models are 'general' models
     {'model':'Phi-3-vision-128k-instruct','g':1,'mb':40000,'mode':'general', 'size': 'small'},
     {'model':'Phi-3.5V','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-1B-241014','g':1,'mb':12000,'mode':'general', 'size': 'small'},
@@ -38,6 +39,18 @@ JOBS = [
     {'model':'Mantis-8B-siglip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
     {'model':'Mantis-8B-clip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
 ]
+
+# CPU limiting config
+CPU_PER_JOB = 8  # same number of logical CPUs per process
+CPU_IDS = list(range(os.cpu_count() or 1))
+
+def pick_cpus(free_set, n):
+    """Pick n free logical CPUs, or None if not enough."""
+    if len(free_set) < n:
+        return None
+    chosen = sorted(list(free_set))[:n]
+    return chosen
+
 
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
@@ -73,6 +86,7 @@ def pick(free, k, need):
 def main():
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
+    cpu_free = set(CPU_IDS)   # remaining free logical CPUs
     running = []
     completed_jobs = []       # track completed jobs with timing
     overall_start_time = datetime.now()
@@ -102,6 +116,8 @@ def main():
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
+                cpu_free = set(CPU_IDS)
+
                 r['log'].close()
                 running.remove(r)
 
@@ -112,6 +128,12 @@ def main():
             need, k = job['mb'], job['g']
             devs = pick(free, k, need)
             if not devs:
+                i += 1
+                continue
+
+            # choose CPUs for this job
+            cpus = pick_cpus(cpu_free, CPU_PER_JOB)
+            if not cpus:
                 i += 1
                 continue
 
@@ -126,9 +148,16 @@ def main():
             start_time = datetime.now()
             print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
 
-            p = subprocess.Popen(cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
+            # run via taskset
+            final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
+
+            p = subprocess.Popen(final_cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
+
             for d in devs:
                 free[d] -= need
+            for c in cpus:
+                cpu_free.discard(c)
+            
             running.append({'p': p, 'devs': devs, 'log': logf, 'job': job, 'start_time': start_time})
             JOBS.pop(i)
 
