@@ -177,8 +177,16 @@ def main():
     print(f"\nOVERALL STATISTICS:")
     print("-" * 50)
     
+    def to_seconds(x):
+        if isinstance(x, timedelta):
+            return x.total_seconds()
+        elif isinstance(x, (int, float)):
+            return x
+        else:
+            raise TypeError(f"Unsupported type: {type(x)}")
+
     def format_duration(td):
-        total_seconds = int(td)
+        total_seconds = int(to_seconds(td))
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         if hours > 0:
