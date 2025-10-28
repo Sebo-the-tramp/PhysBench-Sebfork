@@ -6,13 +6,18 @@ from datetime import datetime, timedelta
 # config
 DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
+
+# this should run on 8 A100-40GBs
+# GPUS = list(range(8))                    # physical GPU indices to use
+# GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+
+# This should run on 2 5090s
 GPUS = list(range(2))                    # physical GPU indices to use
 GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 
-# This should run on 2 5090s
 
 JOBS = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
