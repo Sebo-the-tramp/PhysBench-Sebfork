@@ -981,7 +981,7 @@ class InternVLChat2(QAModelInstance):
 	# so it is recommended to refer to the implementation of lmdeploy https://github.com/InternLM/lmdeploy
 	def __init__(self, ckpt="OpenGVLab/InternVL2-1B", torch_device=torch.device("cuda"), model_precision=torch.float32):
 		from transformers import AutoTokenizer, AutoModel
-		if '26B' in ckpt or '40B' in ckpt or '76B' in ckpt:  # multi-GPU mode
+		if '26B' in ckpt or '38B' in ckpt or '40B' in ckpt or '76B' in ckpt or '78B' in ckpt:  # multi-GPU mode
 			if '2_5' not in ckpt:
 				if '26' in ckpt:
 					name = 'InternVL2-26B'
