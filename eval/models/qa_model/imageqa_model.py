@@ -16,6 +16,7 @@ from eval.eval_utils.task_evaluator import test_frame
 import cv2
 import av
 import numpy as np
+import math
 
 imageqa_models = {
     "instructblip-flan-t5-xl"              : ("InstructBlip", 	 "Salesforce/instructblip-flan-t5-xl"),
