@@ -116,7 +116,8 @@ def main():
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
-                cpu_free = set(CPU_IDS)
+                                        
+                cpu_free.update(r['cpus'])
 
                 r['log'].close()
                 running.remove(r)
@@ -146,6 +147,7 @@ def main():
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
+            print("AVAILABLE CPUS:", sorted(list(cpu_free)))
             print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
 
             # run via taskset
