@@ -1,11 +1,11 @@
 import argparse
 import torch
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
-from physbench_eval.models.qa_model.model_library.cambrian.conversation import conv_templates, SeparatorStyle
-from physbench_eval.models.qa_model.model_library.cambrian.model.builder import load_pretrained_model
-from physbench_eval.models.qa_model.model_library.cambrian.utils import disable_torch_init
-from physbench_eval.models.qa_model.model_library.cambrian.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path, KeywordsStoppingCriteria
+from eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
+from eval.models.qa_model.model_library.cambrian.conversation import conv_templates, SeparatorStyle
+from eval.models.qa_model.model_library.cambrian.model.builder import load_pretrained_model
+from eval.models.qa_model.model_library.cambrian.utils import disable_torch_init
+from eval.models.qa_model.model_library.cambrian.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path, KeywordsStoppingCriteria
 
 from PIL import Image
 

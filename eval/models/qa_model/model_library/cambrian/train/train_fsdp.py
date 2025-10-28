@@ -36,17 +36,17 @@ import tokenizers
 
 import cambrian
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
+from eval.models.qa_model.model_library.cambrian.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from torch.utils.data import Dataset
-from physbench_eval.models.qa_model.model_library.cambrian.train.cambrian_trainer import CambrianTrainer
+from eval.models.qa_model.model_library.cambrian.train.cambrian_trainer import CambrianTrainer
 
-from physbench_eval.models.qa_model.model_library.cambrian import conversation as conversation_lib
+from eval.models.qa_model.model_library.cambrian import conversation as conversation_lib
 
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
-from physbench_eval.models.qa_model.model_library.cambrian.mm_utils import tokenizer_image_token, tokenizer_image_token_llama3
-from physbench_eval.models.qa_model.model_library.cambrian.train.wandb_nan_alert_callback import NanInfAlertWandbCallback
-from physbench_eval.models.qa_model.model_library.cambrian.model import CambrianLlamaForCausalLM, CambrianMistralForCausalLM
-from physbench_eval.models.qa_model.model_library.cambrian.model.language_model.cambrian_phi3 import CambrianPhi3ForCausalLM
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.mm_utils import tokenizer_image_token, tokenizer_image_token_llama3
+from eval.models.qa_model.model_library.cambrian.train.wandb_nan_alert_callback import NanInfAlertWandbCallback
+from eval.models.qa_model.model_library.cambrian.model import CambrianLlamaForCausalLM, CambrianMistralForCausalLM
+from eval.models.qa_model.model_library.cambrian.model.language_model.cambrian_phi3 import CambrianPhi3ForCausalLM
 from PIL import Image
 
 from ezcolorlog import root_logger as logger

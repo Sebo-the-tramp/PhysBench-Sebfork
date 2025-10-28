@@ -7,7 +7,7 @@ from open_clip import create_model_from_pretrained, get_tokenizer
 from ezcolorlog import root_logger as logger
 
 from .base_encoder import BaseVisionTower
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 
 def extract_interp(model_name):

@@ -15,12 +15,12 @@ import torch
 import uvicorn
 from functools import partial
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import WORKER_HEART_BEAT_INTERVAL
-from physbench_eval.models.qa_model.model_library.cambrian.utils import (server_error_msg,
+from eval.models.qa_model.model_library.cambrian.constants import WORKER_HEART_BEAT_INTERVAL
+from eval.models.qa_model.model_library.cambrian.utils import (server_error_msg,
     pretty_print_semaphore)
-from physbench_eval.models.qa_model.model_library.cambrian.model.builder import load_pretrained_model
-from physbench_eval.models.qa_model.model_library.cambrian.mm_utils import process_images, load_image_from_base64, tokenizer_image_token, KeywordsStoppingCriteria
-from physbench_eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
+from eval.models.qa_model.model_library.cambrian.model.builder import load_pretrained_model
+from eval.models.qa_model.model_library.cambrian.mm_utils import process_images, load_image_from_base64, tokenizer_image_token, KeywordsStoppingCriteria
+from eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from transformers import TextIteratorStreamer
 from threading import Thread
 

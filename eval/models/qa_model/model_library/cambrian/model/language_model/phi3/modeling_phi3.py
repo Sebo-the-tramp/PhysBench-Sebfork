@@ -47,7 +47,7 @@ from transformers.utils import (
 )
 from .configuration_phi3 import Phi3Config
 
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 
 logger = logging.get_logger(__name__)

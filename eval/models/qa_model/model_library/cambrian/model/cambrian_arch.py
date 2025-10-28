@@ -25,9 +25,9 @@ from .multimodal_encoder.builder import build_vision_tower_aux_list
 from .multimodal_projector.builder import build_vision_projector
 from .vision_sampler import VisionTokenSampler
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
+from eval.models.qa_model.model_library.cambrian.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 
 class CambrianMetaModel:

@@ -6,8 +6,8 @@ import math
 import ast
 
 from transformers import StoppingCriteria
-from physbench_eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.constants import IMAGE_TOKEN_INDEX
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 
 def select_best_resolution(original_size, possible_resolutions):

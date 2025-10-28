@@ -1,5 +1,5 @@
 
-from physbench_eval.models.qa_model.model_library.cambrian.train.train_fsdp import train
+from eval.models.qa_model.model_library.cambrian.train.train_fsdp import train
 
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 

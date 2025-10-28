@@ -3,7 +3,7 @@ import json
 
 import requests
 
-from physbench_eval.models.qa_model.model_library.cambrian.conversation import default_conversation
+from eval.models.qa_model.model_library.cambrian.conversation import default_conversation
 
 
 def main():

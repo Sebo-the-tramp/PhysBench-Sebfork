@@ -10,10 +10,10 @@ import hashlib
 
 from ezcolorlog import root_logger as logger
 
-from physbench_eval.models.qa_model.model_library.cambrian.conversation import (default_conversation, conv_templates,
+from eval.models.qa_model.model_library.cambrian.conversation import (default_conversation, conv_templates,
                                    SeparatorStyle)
-from physbench_eval.models.qa_model.model_library.cambrian.constants import LOGDIR
-from physbench_eval.models.qa_model.model_library.cambrian.utils import (server_error_msg,
+from eval.models.qa_model.model_library.cambrian.constants import LOGDIR
+from eval.models.qa_model.model_library.cambrian.utils import (server_error_msg,
     violates_moderation, moderation_msg)
 
 

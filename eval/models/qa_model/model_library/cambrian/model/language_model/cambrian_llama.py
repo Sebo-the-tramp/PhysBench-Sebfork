@@ -39,7 +39,7 @@ from transformers.modeling_attn_mask_utils import (
 )
 
 from ..cambrian_arch import CambrianMetaModel, CambrianMetaForCausalLM
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 logger = logging.get_logger(__name__)
 class CambrianConfig(LlamaConfig):

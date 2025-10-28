@@ -16,11 +16,11 @@ import re
 import uvicorn
 from functools import partial
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import WORKER_HEART_BEAT_INTERVAL
-from physbench_eval.models.qa_model.model_library.cambrian.utils import (build_logger, server_error_msg,
+from eval.models.qa_model.model_library.cambrian.constants import WORKER_HEART_BEAT_INTERVAL
+from eval.models.qa_model.model_library.cambrian.utils import (build_logger, server_error_msg,
     pretty_print_semaphore)
-from physbench_eval.models.qa_model.model_library.cambrian.mm_utils import process_images, load_image_from_base64, tokenizer_image_token, expand2square
-from physbench_eval.models.qa_model.model_library.cambrian.constants import DEFAULT_IMAGE_TOKEN
+from eval.models.qa_model.model_library.cambrian.mm_utils import process_images, load_image_from_base64, tokenizer_image_token, expand2square
+from eval.models.qa_model.model_library.cambrian.constants import DEFAULT_IMAGE_TOKEN
 
 import sglang as sgl
 from sglang.backend.runtime_endpoint import RuntimeEndpoint

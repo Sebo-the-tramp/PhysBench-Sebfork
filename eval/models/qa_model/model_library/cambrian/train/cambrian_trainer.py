@@ -24,7 +24,7 @@ from transformers.trainer import (
 )
 
 from ezcolorlog import root_logger as logger
-from physbench_eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
+from eval.models.qa_model.model_library.cambrian.utils import IS_XLA_AVAILABLE
 
 from packaging import version
 if is_sagemaker_mp_enabled():

@@ -5,7 +5,7 @@ from timm.models.convnext import ConvNeXt
 import torch
 from torch import nn
 import torch.nn.functional as F
-from physbench_eval.models.qa_model.model_library.cambrian.model.multimodal_encoder.base_encoder import BaseVisionTower, ProcessorWrapper
+from eval.models.qa_model.model_library.cambrian.model.multimodal_encoder.base_encoder import BaseVisionTower, ProcessorWrapper
 
 
 def extract_res_interp(model_name):

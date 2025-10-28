@@ -19,8 +19,8 @@ import requests
 import uvicorn
 from ezcolorlog import root_logger as logger
 
-from physbench_eval.models.qa_model.model_library.cambrian.constants import CONTROLLER_HEART_BEAT_EXPIRATION
-from physbench_eval.models.qa_model.model_library.cambrian.utils import server_error_msg
+from eval.models.qa_model.model_library.cambrian.constants import CONTROLLER_HEART_BEAT_EXPIRATION
+from eval.models.qa_model.model_library.cambrian.utils import server_error_msg
 # logger = build_logger("controller", "controller.log")
 
 
