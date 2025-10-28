@@ -41,7 +41,7 @@ JOBS = [
 ]
 
 # CPU limiting config
-CPU_PER_JOB = 8  # same number of logical CPUs per process
+CPU_PER_JOB = 12  # same number of logical CPUs per process
 CPU_IDS = list(range(os.cpu_count() or 1))
 
 def pick_cpus(free_set, n):
@@ -160,7 +160,7 @@ def main():
             for c in cpus:
                 cpu_free.discard(c)
             
-            running.append({'p': p, 'devs': devs, 'log': logf, 'job': job, 'start_time': start_time})
+            running.append({'p': p, 'devs': devs, 'cpus': cpus, 'log': logf, 'job': job, 'start_time': start_time})
             JOBS.pop(i)
 
         time.sleep(0.3)
