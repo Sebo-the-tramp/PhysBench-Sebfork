@@ -16,26 +16,26 @@ JOBS = [
     {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
     {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
     {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
-    {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
-    {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
-    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small', 'uv':['peft==0.17.0']},
-    {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},
-    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    # {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    # {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
+    # {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    # {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
+    # {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
+    # {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
+    # {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small', 'uv':['peft==0.17.0']},
+    # {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    # {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    # {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},
+    # {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'small'},
 ]
 
 def safe(name):
@@ -178,7 +178,7 @@ def main():
     print("-" * 50)
     
     def format_duration(td):
-        hours, remainder = divmod(td.total_seconds(), 3600)
+        hours, remainder = divmod(td, 3600)
         minutes, seconds = divmod(remainder, 60)
         if hours > 0:
             return f"{int(hours):02d}h {int(minutes):02d}m {int(seconds):02d}s"
