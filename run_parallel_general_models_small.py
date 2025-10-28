@@ -102,6 +102,8 @@ def main():
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
+            print(f'Starting: {" ".join(cmd)} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
+
             p = subprocess.Popen(cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
             for d in devs:
                 free[d] -= need
