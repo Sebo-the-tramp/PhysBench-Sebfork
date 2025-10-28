@@ -11,7 +11,6 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
-# maybe it works with 1 image but not with 8 images?
 JOBS = [
     # The first few models are 'image-only' models that need to catch up from the 2 5090 that didn't fit
     {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
@@ -27,6 +26,17 @@ JOBS = [
     {'model':'InternVL2_5-38B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
     {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
+# CPU limiting config
+CPU_PER_JOB = 24  # same number of logical CPUs per process
+CPU_IDS = list(range(os.cpu_count() or 1))
+
+def pick_cpus(free_set, n):
+    """Pick n free logical CPUs, or None if not enough."""
+    if len(free_set) < n:
+        return None
+    chosen = sorted(list(free_set))[:n]
+    return chosen
+
 
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
@@ -62,6 +72,7 @@ def pick(free, k, need):
 def main():
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
+    cpu_free = set(CPU_IDS)   # remaining free logical CPUs
     running = []
     completed_jobs = []       # track completed jobs with timing
     overall_start_time = datetime.now()
@@ -91,6 +102,9 @@ def main():
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
+
+                cpu_free.update(r['cpus'])
+
                 r['log'].close()
                 running.remove(r)
 
@@ -104,6 +118,12 @@ def main():
                 i += 1
                 continue
 
+            # choose CPUs for this job
+            cpus = pick_cpus(cpu_free, CPU_PER_JOB)
+            if not cpus:
+                i += 1
+                continue
+
             env = os.environ.copy()
             env['PYTHONPATH'] = './'
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
@@ -113,12 +133,20 @@ def main():
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
-            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
+            # print("AVAILABLE CPUS:", sorted(list(cpu_free)))
+            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
 
-            p = subprocess.Popen(cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
+            # run via taskset
+            final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
+
+            p = subprocess.Popen(final_cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
+
             for d in devs:
                 free[d] -= need
-            running.append({'p': p, 'devs': devs, 'log': logf, 'job': job, 'start_time': start_time})
+            for c in cpus:
+                cpu_free.discard(c)
+            
+            running.append({'p': p, 'devs': devs, 'cpus': cpus, 'log': logf, 'job': job, 'start_time': start_time})
             JOBS.pop(i)
 
         time.sleep(0.3)
@@ -167,8 +195,17 @@ def main():
     print(f"\nOVERALL STATISTICS:")
     print("-" * 50)
     
+    def to_seconds(x):
+        if isinstance(x, timedelta):
+            return x.total_seconds()
+        elif isinstance(x, (int, float)):
+            return x
+        else:
+            raise TypeError(f"Unsupported type: {type(x)}")
+
     def format_duration(td):
-        hours, remainder = divmod(td, 3600)
+        total_seconds = int(to_seconds(td))
+        hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         if hours > 0:
             return f"{int(hours):02d}h {int(minutes):02d}m {int(seconds):02d}s"
@@ -182,7 +219,7 @@ def main():
     print(f"Total model time: {format_duration(total_model_time)}")
     print(f"Average time per model: {format_duration(avg_time)}")
     if overall_duration.total_seconds() > 0:
-        parallelization_factor = total_model_time.total_seconds() / overall_duration.total_seconds()
+        parallelization_factor = total_model_time / overall_duration.total_seconds()
         print(f"Parallelization factor: {parallelization_factor:.2f}x")
     
     print("="*80)
