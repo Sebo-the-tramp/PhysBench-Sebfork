@@ -146,7 +146,7 @@ def main():
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
-            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
+            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
 
             # run via taskset
             final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
