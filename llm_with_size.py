@@ -17,14 +17,11 @@ JOBS = [
     {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
     # {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
     {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
-
-    {'model':'cambrian-8b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'}, # needs some fixage of the repo
-
-    {'model':'MolmoE-1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-7B-O','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    
-    {'model':'MolmoE-7B-D','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-3b','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
+    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small', 'uv':['peft==0.17.0']},
+    {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-10b','g':2,'mb':24000,'mode':'image-only', 'size': 'small'},
 
     {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'big'},
