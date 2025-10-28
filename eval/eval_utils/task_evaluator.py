@@ -207,7 +207,7 @@ class PhysionBenchEvaluator():
 		return combined_image
 
 	def test(self):
-		print("MY NAME IS:", self.model_name)
+		
 		for item in tqdm(self.dataset[:100]):
 			prompt = item["question"] + self.end_prompt
 			visuals = [self._process_visual_path(f) for f in item["file_name"]]
@@ -263,7 +263,7 @@ class PhysionBenchEvaluator():
 									]:  # general
 				answer = self.model.qa(image=visuals, prompt=prompt, mode=item["mode"])
 			elif self.model_name in ['InternVL2-26B', 'InternVL2-40B',
-									 'InternVL2-Llama3-76B',
+									 'InternVL2-76B',
 									 'InternVL2_5-26B', 'InternVL2_5-38B',
 									 'InternVL2_5-78B']:
 				gt_ind = None

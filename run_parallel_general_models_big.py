@@ -11,13 +11,14 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
+# maybe it works with 1 image but not with 8 images?
 JOBS = [
-    {'model':'InternVL2-26B','g':2,'mb':48000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2-40B','g':4,'mb':64000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2-76B','g':8,'mb':120000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2_5-26B','g':2,'mb':50000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2_5-38B','g':4,'mb':60000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2_5-78B','g':8,'mb':125000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2-40B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2-76B','g':8,'mb':120000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2_5-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2_5-38B','g':4,'mb':28000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2_5-78B','g':8,'mb':125000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
 
 def safe(name):

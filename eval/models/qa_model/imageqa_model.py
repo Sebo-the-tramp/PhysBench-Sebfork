@@ -62,7 +62,7 @@ imageqa_models = {
 	"InternVL2-8B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-8B'),
 	"InternVL2-26B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-26B'),
 	"InternVL2-40B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-40B'),
-	"InternVL2-76B"					       : ("InternVLChat2",   'OpenGVLab/InternVL2-Llama3-76B'),
+	"InternVL2-76B"					       : ("InternVLChat2",   'OpenGVLab/InternVL2-Llama3-76B'), # weird
 	"InternVL2_5-1B"					   : ("InternVLChat2",   'OpenGVLab/InternVL2_5-1B'),
 	"InternVL2_5-2B"					   : ("InternVLChat2",   'OpenGVLab/InternVL2_5-2B'),
 	"InternVL2_5-4B"					   : ("InternVLChat2",   'OpenGVLab/InternVL2_5-4B'),

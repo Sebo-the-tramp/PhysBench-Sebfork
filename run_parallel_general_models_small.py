@@ -12,8 +12,8 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 JOBS = [
-    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'small'},
-    {'model':'Phi-3.5V','g':1,'mb':22000,'mode':'general', 'size': 'small'},
+    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':40000,'mode':'general', 'size': 'small'},
+    {'model':'Phi-3.5V','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-1B-241014','g':1,'mb':8000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-2B-241014','g':1,'mb':12000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-7B-241101','g':1,'mb':18000,'mode':'general', 'size': 'small'},
@@ -22,7 +22,7 @@ JOBS = [
     {'model':'vila-1.5-3b','g':1,'mb':12000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-3b-s2','g':1,'mb':12000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-8b','g':1,'mb':20000,'mode':'general', 'size': 'small'},
-    {'model':'vila-1.5-13b','g':2,'mb':28000,'mode':'general', 'size': 'small'},
+    {'model':'vila-1.5-13b','g':1,'mb':30000,'mode':'general', 'size': 'small'}, # failed why? 
     {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-1B','g':1,'mb':8000,'mode':'general', 'size': 'small'},
