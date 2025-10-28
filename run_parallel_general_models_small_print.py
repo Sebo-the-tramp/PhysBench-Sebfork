@@ -14,8 +14,8 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 JOBS = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    # {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
     # {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
     # {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
     # {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
@@ -201,7 +201,7 @@ def main():
     print(f"Total model time: {format_duration(total_model_time)}")
     print(f"Average time per model: {format_duration(avg_time)}")
     if overall_duration.total_seconds() > 0:
-        parallelization_factor = total_model_time.total_seconds() / overall_duration.total_seconds()
+        parallelization_factor = total_model_time / overall_duration.total_seconds()
         print(f"Parallelization factor: {parallelization_factor:.2f}x")
     
     print("="*80)
