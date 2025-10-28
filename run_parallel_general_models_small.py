@@ -33,7 +33,7 @@ JOBS = [
     {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':2,'mb':24000,'mode':'image-only', 'size': 'small'},
+    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},
 ]
 
 def safe(name):

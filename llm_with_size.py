@@ -22,7 +22,7 @@ JOBS = [
     {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':2,'mb':24000,'mode':'image-only', 'size': 'small'},
+    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},
 
     {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2-26B','g':4,'mb':48000,'mode':'general', 'size': 'big'},
