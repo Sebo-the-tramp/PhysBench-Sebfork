@@ -178,7 +178,7 @@ def main():
     print("-" * 50)
     
     def format_duration(td):
-        total_seconds = int(td.total_seconds())
+        total_seconds = int(td)
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         if hours > 0:
