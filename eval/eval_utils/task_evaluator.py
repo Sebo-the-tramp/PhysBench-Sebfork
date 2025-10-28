@@ -128,7 +128,7 @@ class PhysionBenchEvaluator():
 		self.split = split
 		self._load_dataset(dataset_path)
 
-	def _load_dataset(self, dataset_path, result_path='results'):
+	def _load_dataset(self, dataset_path, result_path='results_tmp_test'):
 		self.dataset_path = dataset_path
 		os.makedirs(os.path.join(self.dataset_path, result_path), exist_ok=True)
 		if self.sample_ratio is None:
