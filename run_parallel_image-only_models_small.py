@@ -39,7 +39,7 @@ JOBS = [
     {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
     {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':32000,'mode':'image-only', 'size': 'small'},
     {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small', 'uv':['peft==0.17.0']},
-    {'model':'MolmoE-1B','g':1,'mb':32000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-1B','g':1,'mb':32000,'mode':'image-only', 'size': 'small'}, # too big for 5090?
     {'model':'MolmoE-7B-O','g':1,'mb':32000,'mode':'image-only', 'size': 'small'},
     {'model':'MolmoE-7B-D','g':1,'mb':32000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},

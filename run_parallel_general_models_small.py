@@ -23,8 +23,8 @@ JOBS = [
     {'model':'vila-1.5-3b-s2','g':1,'mb':15000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-8b','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-13b','g':1,'mb':31000,'mode':'general', 'size': 'small'},
-    {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
-    {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
+    # {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
+    # {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
     {'model':'InternVL2-1B','g':1,'mb':5000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-2B','g':1,'mb':13000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-4B','g':1,'mb':16000,'mode':'general', 'size': 'small'},
