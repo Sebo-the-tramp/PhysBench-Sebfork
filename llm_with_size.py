@@ -22,8 +22,7 @@ JOBS = [
     {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},
-    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},    
  
     {'model':'InternVL2-26B','g':4,'mb':48000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2-40B','g':4,'mb':64000,'mode':'general', 'size': 'big'},
@@ -32,6 +31,7 @@ JOBS = [
     {'model':'InternVL2_5-38B','g':4,'mb':60000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2_5-78B','g':8,'mb':125000,'mode':'general', 'size': 'big'},
 
+    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'Phi-3.5V','g':1,'mb':22000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-1B-241014','g':1,'mb':8000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-2B-241014','g':1,'mb':12000,'mode':'general', 'size': 'small'},

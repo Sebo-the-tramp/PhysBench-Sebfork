@@ -262,10 +262,10 @@ class PhysionBenchEvaluator():
 									 'Efficient-Large-Model/NVILA-Lite-8B', 'Efficient-Large-Model/NVILA-Lite-13B'
 									]:  # general
 				answer = self.model.qa(image=visuals, prompt=prompt, mode=item["mode"])
-			elif self.model_name in ['OpenGVLab/InternVL2-26B', 'OpenGVLab/InternVL2-40B',
-									 'OpenGVLab/InternVL2-Llama3-76B',
-									 'OpenGVLab/InternVL2_5-26B', 'OpenGVLab/InternVL2_5-38B',
-									 'OpenGVLab/InternVL2_5-78B']:
+			elif self.model_name in ['InternVL2-26B', 'InternVL2-40B',
+									 'InternVL2-Llama3-76B',
+									 'InternVL2_5-26B', 'InternVL2_5-38B',
+									 'InternVL2_5-78B']:
 				gt_ind = None
 				combined_image = None
 				for index in range(len(visuals)):
