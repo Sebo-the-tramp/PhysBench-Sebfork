@@ -77,7 +77,7 @@ def main():
     JOBS.sort(key=lambda j: (j['mb'], j['g']), reverse=True)
 
     while JOBS or running:
-        print(f'Waiting: {len(JOBS)} jobs remaining, {len(running)} running. i: {i}')
+        print(f'Waiting: {len(JOBS)} jobs remaining, {len(running)} running')
 
         # reclaim finished
         for r in running[:]:
