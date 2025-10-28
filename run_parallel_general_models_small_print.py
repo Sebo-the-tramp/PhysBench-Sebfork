@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
 GPUS = list(range(8))                    # physical GPU indices to use
-GPU_MB = [24576] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
