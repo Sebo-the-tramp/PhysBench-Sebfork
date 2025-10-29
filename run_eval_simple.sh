@@ -1,0 +1,1 @@
+python -u run_parallel_general_models_big.py 2>&1 | tee log_big_multi.txt

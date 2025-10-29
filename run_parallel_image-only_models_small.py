@@ -4,7 +4,7 @@ from itertools import combinations
 from datetime import datetime, timedelta
 
 # config
-DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
+# DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
 
 # this should run on 8 A100-40GBs
@@ -14,6 +14,7 @@ SPLIT = 'val'
 # This should run on 2 5090s
 GPUS = list(range(2))                    # physical GPU indices to use
 GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+DATASET = '/data0/sebastian.cavada/datasets/'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
