@@ -12,9 +12,16 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 JOBS = [    
+    # The first few models are 'image-only' models that need to catch up from the 2 5090 that didn't fit
+    # actually better to move those models back to the small ones, as they finish faster there
+    {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+
     # All these models are 'general' models
     {'model':'Phi-3-vision-128k-instruct','g':1,'mb':40000,'mode':'general', 'size': 'small'},
-    {'model':'Phi-3.5V','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'Phi-3.5V','g':1,'mb':20000,'mode':'general', 'size': 'small'},        
     {'model':'mPLUG-Owl3-1B-241014','g':1,'mb':12000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-2B-241014','g':1,'mb':16000,'mode':'general', 'size': 'small'},
     {'model':'mPLUG-Owl3-7B-241101','g':1,'mb':22000,'mode':'general', 'size': 'small'},
@@ -24,8 +31,8 @@ JOBS = [
     {'model':'vila-1.5-3b-s2','g':1,'mb':15000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-8b','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'vila-1.5-13b','g':1,'mb':31000,'mode':'general', 'size': 'small'},
-    # {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
-    # {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'}, # bug -> FIXFIXFIX
+    {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-1B','g':1,'mb':5000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-2B','g':1,'mb':13000,'mode':'general', 'size': 'small'},
     {'model':'InternVL2-4B','g':1,'mb':16000,'mode':'general', 'size': 'small'},

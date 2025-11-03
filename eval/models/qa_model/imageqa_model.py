@@ -49,8 +49,9 @@ imageqa_models = {
     "vila-1.5-8b"                          : ("VILAModel", 		 "Efficient-Large-Model/Llama-3-VILA1.5-8B"),
     "vila-1.5-13b"                         : ("VILAModel",       "Efficient-Large-Model/VILA1.5-13b"),
     "cambrian-8b"                          : ("Cambrian", 		 "nyu-visionx/cambrian-8b"),
-	"paligemma2-3b"						   : ("PaliGemma2", 	 "google/paligemma2-3b-ft-docci-448"),
-	"paligemma2-10b"					   : ("PaliGemma2", 	 "google/paligemma2-10b-ft-docci-448"),
+	"paligemma2-3b"						   : ("PaliGemma2", 	 "google/paligemma2-3b-mix-448"), # changing to better models before: google/paligemma2-3b-ft-docci-448
+	"paligemma2-10b"					   : ("PaliGemma2", 	 "google/paligemma2-10b-mix-448"), # changing to better models before: google/paligemma2-10b-ft-docci-448
+	"paligemma2-28b"					   : ("PaliGemma2", 	 "google/paligemma2-28b-mix-448"), # changing to better models before: google/paligemma2-10b-ft-docci-448
     "LLaVA-NeXT-Video-7B-DPO-hf"           : ("LLaVAVideo", 	 "llava-hf/LLaVA-NeXT-Video-7B-DPO-hf"),
     "LLaVA-NeXT-Video-7B-hf"               : ("LLaVAVideo", 	 "llava-hf/LLaVA-NeXT-Video-7B-hf"),
 	"MolmoE-1B"							   : ("MolmoE", 		 "allenai/MolmoE-1B-0924"),
@@ -393,7 +394,7 @@ class PaliGemma2(QAModelInstance):
 		else:
 			image_path = image
 		image = load_image(image_path)
-		model_inputs = self.processor(text=prompt.replace('<image>\n', '') + 'your answer is: ', images=image, return_tensors="pt")\
+		model_inputs = self.processor(text=prompt.replace('<image>\n', '') + 'Answer: ', images=image, return_tensors="pt")\
 			.to(torch.bfloat16).to(self.model.device)
 		input_len = model_inputs["input_ids"].shape[-1]
 
@@ -439,7 +440,7 @@ class LLaVAVideo(QAModelInstance):
 		clip = None
 		imgs = None
 		prompt = "USER:" + prompt + "\nASSISTANT:"
-		for it in image:
+		for it in image:  # max 8 inputs -> I hope
 			if it.endswith(".mp4"):
 				container = av.open(it)
 				total_frames = container.streams.video[0].frames
@@ -447,9 +448,17 @@ class LLaVAVideo(QAModelInstance):
 				clip = self._read_video_pyav(container, indices)
 			else:
 				if imgs==None:
-					imgs = [Image.open(it).convert("RGB")]
+					img = Image.open(it).convert("RGB")
+					w, h = img.size
+					img_resized = img.resize((336, 336)) # -> trying to hardcode and see if this works
+					# img_resized = img.resize((w//4, h//4))  # resize to multiple of 4
+					imgs = [img_resized]
 				else:
-					imgs.append(Image.open(it).convert("RGB"))
+					img = Image.open(it).convert("RGB")
+					w, h = img.size
+					img_resized = img.resize((336, 336)) # -> trying to hardcode and see if this works
+					# img_resized = img.resize((w//4, h//4))  # resize to multiple of 4
+					imgs.append(img_resized)
 
 		inputs = self.processor(text=prompt, videos=clip, images=imgs, padding=True, return_tensors="pt").to(self.model.device, self.model_precision)
 
@@ -613,7 +622,7 @@ class Mantis(QAModelInstance):
 				else:
 					image_list.append(Image.open(it).convert('RGB'))
 			if 'Idefics2' in self.ckpt:
-				prompt = "User:" + prompt.replace("<video>", "<image>" * video_token_num) + "\nAssistant:"
+				prompt = "User:" + prompt.replace("<video>", "<image>" * video_token_num) + "\nAssistant:"				
 				inputs = self.processor(text=prompt, images=image_list, return_tensors='pt').to(self.model.device)
 			elif 'llava-7b' in self.ckpt or 'Fuyu' in self.ckpt or 'llama3' in self.ckpt:
 				prompt = prompt.replace("<video>", "<image>" * video_token_num)
@@ -621,7 +630,7 @@ class Mantis(QAModelInstance):
 
 		print(prompt)
 		if 'Idefics2' in self.ckpt:
-			output = self.model.generate(**inputs, max_new_tokens=10, do_sample=False)
+			output = self.model.generate(**inputs, max_new_tokens=1000, do_sample=False)
 			response = self.processor.decode(output[0][2:], skip_special_tokens=True).split("Assistant:")[-1].strip()
 		elif 'llava-7b' in self.ckpt or 'Fuyu' in self.ckpt:
 			response, history = chat_mllava(prompt, images, self.model, self.processor,
@@ -629,8 +638,9 @@ class Mantis(QAModelInstance):
 											max_new_tokens=1, num_beams=1, do_sample=False,
 											pad_token_id=self.processor.tokenizer.eos_token_id)
 		elif 'llama3' in self.ckpt:
+			# max_new_tokens=100 for llama3 just for testing now
 			response, history = chat_mllava(prompt, images, self.model, self.processor,
-											max_new_tokens=1, num_beams=1, do_sample=False)
+											max_new_tokens=1000, num_beams=1, do_sample=False)
 		cprint(response, 'cyan')
 		return response
 
@@ -1140,7 +1150,7 @@ class InternVLChat2(QAModelInstance):
 
 		prompt = prompt.replace("<video>", "<image>" * video_token_num)
 		response, history = self.model.chat(self.tokenizer, pixel_values, prompt,
-									   dict(max_new_tokens=10, do_sample=False),
+									   dict(max_new_tokens=1000, do_sample=False),
 									   num_patches_list=num_patches_list,
 									   history=None, return_history=True)
 		print('response')
@@ -1712,9 +1722,11 @@ class MiniCPMV(QAModelInstance):
 					temperature=0.1,
 					max_new_token=10
 				)
+			# An error occurred: index is out of bounds for dimension with size 0
 			cprint(answer, 'cyan')
 			return answer
-		except:
+		except Exception as e:
+			print("An error occurred:", str(e))
 			return None
 
 

@@ -1,0 +1,2 @@
+CUDA_VISIBLE_DEVICES=0,1 PYTHONPATH='./' python eval/test_benchmark.py --model_name "vila-1.5-8b" \
+    --dataset_path /data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/output --split val

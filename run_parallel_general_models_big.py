@@ -12,12 +12,6 @@ GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heteroge
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 JOBS = [
-    # The first few models are 'image-only' models that need to catch up from the 2 5090 that didn't fit
-    {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-    {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
-
     # All these models are 'general' models
     {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},

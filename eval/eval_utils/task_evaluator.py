@@ -93,6 +93,8 @@ task_split = {
 }
 
 
+PATCH_RUN_NAME = "_run03_5K.json"
+
 class PhysionBenchEvaluator():
 	def __init__(
 			self,
@@ -120,15 +122,19 @@ class PhysionBenchEvaluator():
 		assert mode in ["image-only", "image&video", "general"], f"not supporting {mode}"
 
 		# ref to llava 1.5
-		self.end_prompt = "\nAnswer with the option's letter from the given choices directly. You can only answer one letter from A, B, C, or D."
+		self.end_prompt = "\n Answer with the option's letter from the given choices directly. You can only answer one letter from A, B, C, D.\n"
+		# self.end_prompt = "\nAccurately describe the choice you made. Describing your thought process. Finally answer the correct answer in the following format: <answer>{YOUR ANSWER LETTER}</answer>\n"
+		# self.end_prompt = "\nDescribe what you see in the images. Do you see any object? Or the object mentioned in the question? Do not answer the question.\n"
+		# self.end_prompt = "\nDescribe what you see first. Then Answer with the option's letter from the given choices directly. Then also answer with A, B, C, or D.\n"
+
 		# ref to TaskMeAnything
 		self.video2image_prompt = 'This is a series of images sampled at equal intervals from the beginning to the end of a video, based on the series of images, output the best option for the question.\n'
 
 		self.sample_ratio = sample_ratio
 		self.split = split
-		self._load_dataset(dataset_path)
+		self._load_dataset(dataset_path, result_path=f"results{PATCH_RUN_NAME.replace('.json', '')}")
 
-	def _load_dataset(self, dataset_path, result_path='results_tmp_test'):
+	def _load_dataset(self, dataset_path, result_path='results'):
 		self.dataset_path = dataset_path
 		os.makedirs(os.path.join(self.dataset_path, result_path), exist_ok=True)
 		if self.sample_ratio is None:
@@ -140,7 +146,8 @@ class PhysionBenchEvaluator():
 			self.result_file = self.result_file.replace(self.model_name, f"{self.model_name}_{test_frame}")
 			self.mode = "video-only"
 
-		with open(self.dataset_path +r'/test.json', 'r', encoding='utf-8') as file:
+		# with open(self.dataset_path +r'/test.json', 'r', encoding='utf-8') as file:
+		with open(self.dataset_path + f'/test{PATCH_RUN_NAME}', 'r', encoding='utf-8') as file:
 			dataset = json.load(file)
 
 		if self.split == 'val':
@@ -209,6 +216,7 @@ class PhysionBenchEvaluator():
 	def test(self):
 		
 		for item in tqdm(self.dataset[:1000]):
+			print("Current idx:", item["idx"])
 			prompt = item["question"] + self.end_prompt
 			visuals = [self._process_visual_path(f) for f in item["file_name"]]
 			if self.model_name in ['llava-1.5-7b-hf', 'llava-1.5-13b-hf', 'cambrian-8b',
