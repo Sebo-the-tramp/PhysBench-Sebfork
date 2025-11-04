@@ -215,7 +215,7 @@ class PhysionBenchEvaluator():
 
 	def test(self):
 		
-		for item in tqdm(self.dataset[:1000]):
+		for item in tqdm(self.dataset):
 			print("Current idx:", item["idx"])
 			prompt = item["question"] + self.end_prompt
 			visuals = [self._process_visual_path(f) for f in item["file_name"]]
