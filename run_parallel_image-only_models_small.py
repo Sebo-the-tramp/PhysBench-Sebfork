@@ -15,7 +15,7 @@ SPLIT = 'val'
 GPUS = list(range(2))                    # physical GPU indices to use
 GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 DATASET = '/data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/output'
-RUN_NAME = 'run04_1K_balanced'
+RUN_NAME = 'run_05_10K'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
