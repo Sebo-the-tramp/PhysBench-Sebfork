@@ -93,7 +93,7 @@ task_split = {
 }
 
 
-PATCH_RUN_NAME = "_run04_1K.json"
+PATCH_RUN_NAME = "_run04_1K_balanced.json"
 
 class PhysionBenchEvaluator():
 	def __init__(

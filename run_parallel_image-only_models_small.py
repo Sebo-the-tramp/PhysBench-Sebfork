@@ -15,10 +15,28 @@ SPLIT = 'val'
 GPUS = list(range(2))                    # physical GPU indices to use
 GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 DATASET = '/data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/output'
+RUN_NAME = 'run04_1K_balanced'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 
+# Initial check for answers and questions
+
+# call another python program
+check_program = "/data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/utils/check_questions_have_answers.py"
+question_path = os.path.join(DATASET, f"test_{RUN_NAME}.json")
+answer_path = os.path.join(DATASET, f"val_answer_{RUN_NAME}.json")
+
+# Run the check program and get the result
+result = subprocess.run(['python', check_program, "--question-path", question_path, "--answer-path", answer_path], capture_output=True, text=True)
+
+# If the check fails (non-zero return code), stop execution
+if result.returncode != 0:
+    print(f"Check failed: {result.stderr}")
+    print("Stopping execution.")
+    exit(1)
+
+print("Check passed. Continuing with job execution...")
 
 JOBS = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
@@ -36,12 +54,9 @@ JOBS = [
     {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
     {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     # {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    # {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small', 'uv': ['transformers==4.47.1']},
-    # {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small', 'uv': ['transformers==4.47.1']},
-    # {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small', 'uv': ['transformers==4.47.1']},
+    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
     {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
-    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1'
+    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
     {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
 ]
@@ -127,6 +142,7 @@ def main():
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
             cmd = make_cmd(job)
+            print("running the command:", ' '.join(cmd))
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
