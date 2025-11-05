@@ -21,7 +21,7 @@ JOBS = [
     {'model':'InternVL2_5-78B','g':8,'mb':5000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
 # CPU limiting config
-CPU_PER_JOB = 48  # same number of logical CPUs per process
+CPU_PER_JOB = 16  # same number of logical CPUs per process
 CPU_IDS = list(range(os.cpu_count() or 1))
 
 def pick_cpus(free_set, n):
