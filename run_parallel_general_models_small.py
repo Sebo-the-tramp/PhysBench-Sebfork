@@ -8,6 +8,7 @@ DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
 GPUS = list(range(8))                    # physical GPU indices to use
 GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+RUN_NAME = 'run_05_10K'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
@@ -62,12 +63,16 @@ def pick_cpus(free_set, n):
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
 
-def make_cmd(job):
+def make_cmd(job, run_name):
+    if run_name is None:
+        raise ValueError("run_name must be provided to make_cmd")
+    
     base = [
         'python','eval/test_benchmark.py',
         '--model_name', job['model'],
         '--dataset_path', DATASET,
-        '--split', SPLIT
+        '--split', SPLIT,
+        '--run_name', run_name
     ]
     if job.get('extra'):
         base += job['extra']
@@ -90,7 +95,7 @@ def pick(free, k, need):
                 best_cost, best = cost, combo
     return list(best) if best else None
 
-def main():
+def run_one_experiment(run_name='default_run'):
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
     cpu_free = set(CPU_IDS)   # remaining free logical CPUs
@@ -149,7 +154,7 @@ def main():
             env['PYTHONPATH'] = './'
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
-            cmd = make_cmd(job)
+            cmd = make_cmd(job, run_name=run_name)
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
@@ -245,5 +250,55 @@ def main():
     
     print("="*80)
 
-if __name__ == '__main__':
+GENERAL_RUN_COUNT = 6
+
+def main():
+
+    # we have a list of experiments with different run names
+
+    runs_config = {
+        "10K_general":{
+            "run_name": ""
+        },
+        "1K_soft":{
+            "run_name": ""
+        },
+        "1K_medium":{
+            "run_name": ""
+        },
+        "1K_stiff":{
+            "run_name": ""
+        },
+        "1K_slope_1":{
+            "run_name": "",
+            "additional_param": {"slope": 1}
+        },
+        "1K_slope_2":{
+            "run_name": "",
+            "additional_param": {"slope": 2}
+        },
+        "1K_slope_4":{
+            "run_name": "",
+            "additional_param": {"slope": 4}
+        },
+        "1K_roi_circling":{
+            "run_name": ""
+        },
+        "1K_masking":{
+            "run_name": ""
+        },
+        "1K_scene_context":{
+            "run_name": ""
+        },
+        "1K_textual_context":{
+            "run_name": ""
+        }
+    }
+
+    for run_name, config in runs_config.items():
+        config["run_name"] = f"{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
+        print(f"Starting experiment: {run_name}")
+        # run_one_experiment(run_name=run_name, **config)
+
+if __name__ == '__main__':    
     main()

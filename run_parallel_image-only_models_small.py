@@ -14,8 +14,8 @@ SPLIT = 'val'
 # This should run on 2 5090s
 GPUS = list(range(2))                    # physical GPU indices to use
 GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
-DATASET = '/data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/output'
-RUN_NAME = 'run_05_10K'
+DATASET = '/data0/sebastian.cavada/compositional-physics/tiny_vqa_deterministic/output'
+RUN_NAME = 'run_06_general'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
@@ -23,9 +23,9 @@ RUN_NAME = 'run_05_10K'
 # Initial check for answers and questions
 
 # call another python program
-check_program = "/data0/sebastian.cavada/compositional-physics/tiny_vqa_creation/utils/check_questions_have_answers.py"
-question_path = os.path.join(DATASET, f"test_{RUN_NAME}.json")
-answer_path = os.path.join(DATASET, f"val_answer_{RUN_NAME}.json")
+check_program = "/data0/sebastian.cavada/compositional-physics/tiny_vqa_deterministic/utils/check_questions_have_answers.py"
+question_path = os.path.join(DATASET, RUN_NAME, f"test_{RUN_NAME}.json")
+answer_path = os.path.join(DATASET, RUN_NAME, f"val_answer_{RUN_NAME}.json")
 
 # Run the check program and get the result
 result = subprocess.run(['python', check_program, "--question-path", question_path, "--answer-path", answer_path], capture_output=True, text=True)
@@ -40,37 +40,42 @@ print("Check passed. Continuing with job execution...")
 
 JOBS = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
-    {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    # {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    # {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    # {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    # {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
+    # {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    # {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
+    # {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
+    # {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     # {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
-    {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
-    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
-    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
+    # {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
+    # {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
+    # {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
+    # {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    # {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
 ]
 
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
 
-def make_cmd(job):
+def make_cmd(job, run_name):
+    if run_name is None:
+        raise ValueError("run_name must be provided to make_cmd")
+    
     base = [
         'python','eval/test_benchmark.py',
         '--model_name', job['model'],
         '--dataset_path', DATASET,
-        '--split', SPLIT
+        '--split', SPLIT,
+        '--run_name', f"{run_name}/test_{run_name}"
     ]
+    print("run_name in make_cmd:", base)
     if job.get('extra'):
         base += job['extra']
     if job.get('uv'):
@@ -92,7 +97,11 @@ def pick(free, k, need):
                 best_cost, best = cost, combo
     return list(best) if best else None
 
-def main():
+def run_one_experiment(run_name='default_run'):
+
+    print("Starting experiment with run name:", run_name)
+    print()
+
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
     running = []
@@ -141,7 +150,7 @@ def main():
             env['PYTHONPATH'] = './'
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
-            cmd = make_cmd(job)
+            cmd = make_cmd(job, run_name=run_name)
             print("running the command:", ' '.join(cmd))
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
@@ -230,5 +239,43 @@ def main():
     
     print("="*80)
 
-if __name__ == '__main__':
+GENERAL_RUN_COUNT = 6
+
+def main():
+
+    # we have a list of experiments with different run names
+
+    runs_config = {
+        "10K_general":{
+            "run_name": "run_06_general"
+        },
+        # "1K_soft":{
+        #     "run_name": "run_06_1K_soft"
+        # },
+        # "1K_medium":{
+        #     "run_name": "run_06_1K_medium"
+        # },
+        # "1K_stiff":{
+        #     "run_name": "run_06_1K_stiff"
+        # },
+        # "1K_roi_circling":{
+        #     "run_name": "run_06_1K_roi_circling"
+        # },
+        # "1K_masking":{
+        #     "run_name": "run_06_1K_masking"
+        # },
+        # "1K_scene_context":{
+        #     "run_name": "run_06_1K_scene_context"
+        # },
+        # "1K_textual_context":{
+        #     "run_name": "run_06_1K_textual_context"
+        # }
+    }
+
+    for run_name, config in runs_config.items():
+        # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
+        print(f"Starting experiment: {config['run_name']}")
+        run_one_experiment(run_name=config['run_name'])
+
+if __name__ == '__main__':    
     main()

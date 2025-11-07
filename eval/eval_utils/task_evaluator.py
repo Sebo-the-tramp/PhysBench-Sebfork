@@ -93,7 +93,7 @@ task_split = {
 }
 
 
-PATCH_RUN_NAME = "_run_05_10K.json"
+# PATCH_RUN_NAME = "_run_05_10K"
 
 class PhysionBenchEvaluator():
 	def __init__(
@@ -104,7 +104,8 @@ class PhysionBenchEvaluator():
 			model_name:str,
 			sample_ratio: float = None,
 			resume: bool = True,
-			split: str= 'test'
+			split: str= 'test',
+			run_name: str = 'default_run'
 	):
 		'''
 		:param model: Model, need have a method named qa
@@ -132,9 +133,9 @@ class PhysionBenchEvaluator():
 
 		self.sample_ratio = sample_ratio
 		self.split = split
-		self._load_dataset(dataset_path, result_path=f"results{PATCH_RUN_NAME.replace('.json', '')}")
+		self._load_dataset(dataset_path, result_path=f"{run_name}/results_{run_name}", run_name=run_name)
 
-	def _load_dataset(self, dataset_path, result_path='results'):
+	def _load_dataset(self, dataset_path, result_path='results', run_name='default_run'):
 		self.dataset_path = dataset_path
 		os.makedirs(os.path.join(self.dataset_path, result_path), exist_ok=True)
 		if self.sample_ratio is None:
@@ -147,7 +148,7 @@ class PhysionBenchEvaluator():
 			self.mode = "video-only"
 
 		# with open(self.dataset_path +r'/test.json', 'r', encoding='utf-8') as file:
-		with open(self.dataset_path + f'/test{PATCH_RUN_NAME}', 'r', encoding='utf-8') as file:
+		with open(self.dataset_path + f'/{run_name}.json', 'r', encoding='utf-8') as file:
 			dataset = json.load(file)
 
 		if self.split == 'val':
@@ -214,7 +215,7 @@ class PhysionBenchEvaluator():
 		return combined_image
 
 	def test(self):
-		
+
 		for item in tqdm(self.dataset):
 			print("Current idx:", item["idx"])
 			prompt = item["question"] + self.end_prompt

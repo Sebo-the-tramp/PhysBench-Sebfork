@@ -14,6 +14,7 @@ def parse_args():
                         help="data you put USC-GVL/PhysBench")
     parser.add_argument("--split", type=str, default='val', choices=['val', 'test'],
                         help="Choose between 'val' or 'test' split")
+    parser.add_argument("--run_name", type=str, default='default_run', help="Name of the run for logging purposes")
     args = parser.parse_args()
     return args
 
@@ -22,6 +23,7 @@ if __name__ == "__main__":
     args = parse_args()
     model_name = args.model_name
     dataset_path = args.dataset_path
+    run_name = args.run_name
 
     if model_name in imageqa_models.keys():
         qa_class = ImageQAModel(model_name=model_name, precision=torch.float16)
@@ -37,7 +39,8 @@ if __name__ == "__main__":
         model_name=model_name,
         resume=True,
         sample_ratio=None,
-        split=args.split
+        split=args.split,
+        run_name=run_name
     )
 
     task_evaluator.test()
