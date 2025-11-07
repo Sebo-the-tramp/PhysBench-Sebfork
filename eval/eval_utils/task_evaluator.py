@@ -148,6 +148,7 @@ class PhysionBenchEvaluator():
 			self.mode = "video-only"
 
 		# with open(self.dataset_path +r'/test.json', 'r', encoding='utf-8') as file:
+		print("[Info] Loading dataset from: ", self.dataset_path + f'/{run_name}.json')
 		with open(self.dataset_path + f'/{run_name}.json', 'r', encoding='utf-8') as file:
 			dataset = json.load(file)
 
