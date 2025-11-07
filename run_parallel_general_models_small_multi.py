@@ -68,7 +68,7 @@ def make_cmd(job, run_name):
         '--model_name', job['model'],
         '--dataset_path', DATASET,
         '--split', SPLIT,
-        '--run_name', f"{run_name}/test_{run_name}"
+        '--run_name', f"{run_name}"
     ]
     print("run_name in make_cmd:", base)
     if job.get('extra'):
