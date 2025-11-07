@@ -242,7 +242,8 @@ def main():
 
     runs_config = {
         "10K_general":{
-            "run_name": "run_06_general"
+            "run_name": "run_06_general",
+            "quantity": "10K"
         },
         # "1K_soft":{
         #     "run_name": "run_06_1K_soft"
@@ -269,8 +270,8 @@ def main():
 
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
-        print(f"Starting experiment: {config['run_name']}")
-        run_one_experiment(run_name=config['run_name'])
+        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{config['quantity']}"
+        run_one_experiment(run_name=run_name_and_path)
 
 if __name__ == '__main__':    
     main()
