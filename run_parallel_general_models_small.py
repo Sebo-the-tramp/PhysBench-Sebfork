@@ -296,9 +296,9 @@ def main():
     }
 
     for run_name, config in runs_config.items():
-        config["run_name"] = f"{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
+        # config["run_name"] = f"{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
         print(f"Starting experiment: {run_name}")
-        # run_one_experiment(run_name=run_name, **config)
+        run_one_experiment(run_name=run_name, **config)
 
 if __name__ == '__main__':    
     main()

@@ -40,25 +40,25 @@ print("Check passed. Continuing with job execution...")
 
 JOBS = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    # {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    # {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    # {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
-    # {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    # {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    # {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    # {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    # {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    # {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
-    # {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    # {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
-    # {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
-    # {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    # {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    # {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
-    # {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
-    # {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
-    # {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    # {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
+    {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
+    {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
+    {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
+    {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
+    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
+    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
 ]
 
 def safe(name):
@@ -73,7 +73,7 @@ def make_cmd(job, run_name):
         '--model_name', job['model'],
         '--dataset_path', DATASET,
         '--split', SPLIT,
-        '--run_name', f"{run_name}/test_{run_name}"
+        '--run_name', f"{run_name}"
     ]
     print("run_name in make_cmd:", base)
     if job.get('extra'):
@@ -247,7 +247,8 @@ def main():
 
     runs_config = {
         "10K_general":{
-            "run_name": "run_06_general"
+            "run_name": "run_06_general",
+            "quantity": "10K"
         },
         # "1K_soft":{
         #     "run_name": "run_06_1K_soft"
@@ -275,7 +276,8 @@ def main():
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
         print(f"Starting experiment: {config['run_name']}")
-        run_one_experiment(run_name=config['run_name'])
+        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{config['quantity']}"
+        run_one_experiment(run_name=run_name_and_path)
 
 if __name__ == '__main__':    
     main()

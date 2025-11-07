@@ -133,7 +133,7 @@ class PhysionBenchEvaluator():
 
 		self.sample_ratio = sample_ratio
 		self.split = split
-		self._load_dataset(dataset_path, result_path=f"{run_name}/results_{run_name}", run_name=run_name)
+		self._load_dataset(dataset_path, result_path=f"{run_name.split('/')[0]}/results_{run_name.split('/')[0]}", run_name=run_name)
 
 	def _load_dataset(self, dataset_path, result_path='results', run_name='default_run'):
 		self.dataset_path = dataset_path
