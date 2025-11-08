@@ -22,10 +22,10 @@ RUN_NAME = 'run_05_10K'
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
 JOBS = [
     # All these models are 'general' models
-    {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2-26B','g':2,'mb':40000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
     # {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-    {'model':'InternVL2_5-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2_5-26B','g':2,'mb':40000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2_5-38B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
     # {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
