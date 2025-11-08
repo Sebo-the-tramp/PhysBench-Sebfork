@@ -248,27 +248,35 @@ def main():
         #     "quantity": "10K"
         # },
         "1K_soft":{
-            "run_name": "run_06_1K_soft"
+            "run_name": "run_06_soft",
+            "quantity": "1K"
         },
         "1K_medium":{
-            "run_name": "run_06_1K_medium"
+            "run_name": "run_06_medium",
+            "quantity": "1K"
         },
         "1K_stiff":{
-            "run_name": "run_06_1K_stiff"
+            "run_name": "run_06_stiff",
+            "quantity": "1K"
         },
         "1K_roi_circling":{
-            "run_name": "run_06_1K_roi_circling"
+            "run_name": "run_06_roi_circling",
+            "quantity": "1K"
         },
         "1K_masking":{
-            "run_name": "run_06_1K_masking"
+            "run_name": "run_06_masking",
+            "quantity": "1K"
         },
         "1K_scene_context":{
-            "run_name": "run_06_1K_scene_context"
+            "run_name": "run_06_scene_context",
+            "quantity": "1K"
         },
         "1K_textual_context":{
-            "run_name": "run_06_1K_textual_context"
+            "run_name": "run_06_textual_context",
+            "quantity": "1K"
         }
     }
+
 
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
