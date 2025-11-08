@@ -11,55 +11,27 @@ SPLIT = 'val'
 # GPUS = list(range(8))                    # physical GPU indices to use
 # GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 
-# This should run on 2 5090s
-GPUS = list(range(2))                    # physical GPU indices to use
-GPU_MB = [32607] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
-DATASET = '/data0/sebastian.cavada/compositional-physics/tiny_vqa_deterministic/output'
-RUN_NAME = 'run_06_general'
+# config
+DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
+SPLIT = 'val'
+GPUS = list(range(8))                    # physical GPU indices to use
+GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+RUN_NAME = 'run_05_10K'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
-
-# Initial check for answers and questions
-
-# call another python program
-check_program = "/data0/sebastian.cavada/compositional-physics/tiny_vqa_deterministic/utils/check_questions_have_answers.py"
-question_path = os.path.join(DATASET, RUN_NAME, f"test_{RUN_NAME}.json")
-answer_path = os.path.join(DATASET, RUN_NAME, f"val_answer_{RUN_NAME}.json")
-
-# Run the check program and get the result
-result = subprocess.run(['python', check_program, "--question-path", question_path, "--answer-path", answer_path], capture_output=True, text=True)
-
-# If the check fails (non-zero return code), stop execution
-if result.returncode != 0:
-    print(f"Check failed: {result.stderr}")
-    print("Stopping execution.")
-    exit(1)
-
-print("Check passed. Continuing with job execution...")
-
 JOBS = [
-    {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
-    {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
-    {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
-    {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
-    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
-    {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
-    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
-    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
-    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'},   
+    # All these models are 'general' models
+    {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    # {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'InternVL2_5-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
+    {'model':'InternVL2_5-38B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    # {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
 ]
+# CPU limiting config
+CPU_PER_JOB = 24  # same number of logical CPUs per process
+CPU_IDS = list(range(os.cpu_count() or 1))
 
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
@@ -246,43 +218,35 @@ def main():
     # we have a list of experiments with different run names
 
     runs_config = {
-        # "10K_general":{
-        #     "run_name": "run_06_general",
-        #     "quantity": "10K"
+        "10K_general":{
+            "run_name": "run_06_general",
+            "quantity": "10K"
+        },
+        # "1K_soft":{
+        #     "run_name": "run_06_1K_soft"
         # },
-        "1K_soft":{
-            "run_name": "run_06_soft",
-            "quantity": "1K"
-        },
-        "1K_medium":{
-            "run_name": "run_06_medium",
-            "quantity": "1K"
-        },
-        "1K_stiff":{
-            "run_name": "run_06_stiff",
-            "quantity": "1K"
-        },
-        "1K_roi_circling":{
-            "run_name": "run_06_roi_circling",
-            "quantity": "1K"
-        },
-        "1K_masking":{
-            "run_name": "run_06_masking",
-            "quantity": "1K"
-        },
-        "1K_scene_context":{
-            "run_name": "run_06_scene_context",
-            "quantity": "1K"
-        },
-        "1K_textual_context":{
-            "run_name": "run_06_textual_context",
-            "quantity": "1K"
-        }
+        # "1K_medium":{
+        #     "run_name": "run_06_1K_medium"
+        # },
+        # "1K_stiff":{
+        #     "run_name": "run_06_1K_stiff"
+        # },
+        # "1K_roi_circling":{
+        #     "run_name": "run_06_1K_roi_circling"
+        # },
+        # "1K_masking":{
+        #     "run_name": "run_06_1K_masking"
+        # },
+        # "1K_scene_context":{
+        #     "run_name": "run_06_1K_scene_context"
+        # },
+        # "1K_textual_context":{
+        #     "run_name": "run_06_1K_textual_context"
+        # }
     }
 
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
-        print(f"Starting experiment: {config['run_name']}")
         run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{config['quantity']}"
         run_one_experiment(run_name=run_name_and_path)
 
