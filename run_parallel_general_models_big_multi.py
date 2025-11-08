@@ -71,10 +71,22 @@ def pick(free, k, need):
 
 def run_one_experiment(run_name='default_run'):
 
-    print("Starting experiment with run name:", run_name)
-    print()
-
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
+    summary_stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    summary_log_path = logs / f'{summary_stamp}_{safe(run_name)}_summary.log'
+    summary_log = open(summary_log_path, 'w')
+
+    def log(msg='', end='\n'):
+        text = str(msg)
+        print(text, end=end, flush=True)
+        summary_log.write(text)
+        if end:
+            summary_log.write(end)
+        summary_log.flush()
+
+    log(f"Starting experiment with run name: {run_name}")
+    log(f"Summary log: {summary_log_path}")
+    log()
     free = GPU_MB[:]          # remaining MiB per GPU
     running = []
     completed_jobs = []       # track completed jobs with timing
@@ -101,7 +113,7 @@ def run_one_experiment(run_name='default_run'):
                 
                 # Print completion message
                 status = "✓" if r['p'].returncode == 0 else "✗"
-                print(f'{status} Completed: {r["job"]["model"]} in {duration} (return code: {r["p"].returncode}) {len(JOBS)} jobs remaining.')
+                log(f'{status} Completed: {r["job"]["model"]} in {duration} (return code: {r["p"].returncode}) {len(JOBS)} jobs remaining.')
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
@@ -123,12 +135,12 @@ def run_one_experiment(run_name='default_run'):
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
             cmd = make_cmd(job, run_name=run_name)
-            print("running the command:", ' '.join(cmd))
+            log("running the command: " + ' '.join(cmd))
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
-            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
+            log(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
 
             p = subprocess.Popen(cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
             for d in devs:
@@ -142,9 +154,9 @@ def run_one_experiment(run_name='default_run'):
     overall_end_time = datetime.now()
     overall_duration = overall_end_time - overall_start_time
     
-    print("\n" + "="*80)
-    print("EXECUTION SUMMARY")
-    print("="*80)
+    log("\n" + "="*80)
+    log("EXECUTION SUMMARY")
+    log("="*80)
     
     # Sort by duration for summary
     completed_jobs.sort(key=lambda x: x['duration'], reverse=True)
@@ -152,8 +164,8 @@ def run_one_experiment(run_name='default_run'):
     successful_jobs = [j for j in completed_jobs if j['return_code'] == 0]
     failed_jobs = [j for j in completed_jobs if j['return_code'] != 0]
     
-    print(f"\nSUCCESSFUL MODELS ({len(successful_jobs)}):")
-    print("-" * 50)
+    log(f"\nSUCCESSFUL MODELS ({len(successful_jobs)}):")
+    log("-" * 50)
     for job in successful_jobs:
         hours, remainder = divmod(job['duration'].total_seconds(), 3600)
         minutes, seconds = divmod(remainder, 60)
@@ -161,11 +173,11 @@ def run_one_experiment(run_name='default_run'):
             duration_str = f"{int(hours):02d}h {int(minutes):02d}m {int(seconds):02d}s"
         else:
             duration_str = f"{int(minutes):02d}m {int(seconds):02d}s"
-        print(f"✓ {job['model']:<40} {duration_str}")
+        log(f"✓ {job['model']:<40} {duration_str}")
     
     if failed_jobs:
-        print(f"\nFAILED MODELS ({len(failed_jobs)}):")
-        print("-" * 50)
+        log(f"\nFAILED MODELS ({len(failed_jobs)}):")
+        log("-" * 50)
         for job in failed_jobs:
             hours, remainder = divmod(job['duration'].total_seconds(), 3600)
             minutes, seconds = divmod(remainder, 60)
@@ -173,14 +185,14 @@ def run_one_experiment(run_name='default_run'):
                 duration_str = f"{int(hours):02d}h {int(minutes):02d}m {int(seconds):02d}s"
             else:
                 duration_str = f"{int(minutes):02d}m {int(seconds):02d}s"
-            print(f"✗ {job['model']:<40} {duration_str} (code: {job['return_code']})")
+            log(f"✗ {job['model']:<40} {duration_str} (code: {job['return_code']})")
     
     # Overall statistics
     total_model_time = sum(job['duration'].total_seconds() for job in completed_jobs)
     avg_time = total_model_time / len(completed_jobs) if completed_jobs else timedelta(0)
     
-    print(f"\nOVERALL STATISTICS:")
-    print("-" * 50)
+    log(f"\nOVERALL STATISTICS:")
+    log("-" * 50)
     
     def to_seconds(x):
         if isinstance(x, timedelta):
@@ -199,17 +211,19 @@ def run_one_experiment(run_name='default_run'):
         else:
             return f"{int(minutes):02d}m {int(seconds):02d}s"
     
-    print(f"Total models completed: {len(completed_jobs)}")
-    print(f"Successful: {len(successful_jobs)}")
-    print(f"Failed: {len(failed_jobs)}")
-    print(f"Overall wall time: {format_duration(overall_duration)}")
-    print(f"Total model time: {format_duration(total_model_time)}")
-    print(f"Average time per model: {format_duration(avg_time)}")
+    log(f"Total models completed: {len(completed_jobs)}")
+    log(f"Successful: {len(successful_jobs)}")
+    log(f"Failed: {len(failed_jobs)}")
+    log(f"Overall wall time: {format_duration(overall_duration)}")
+    log(f"Total model time: {format_duration(total_model_time)}")
+    log(f"Average time per model: {format_duration(avg_time)}")
     if overall_duration.total_seconds() > 0:
         parallelization_factor = total_model_time / overall_duration.total_seconds()
-        print(f"Parallelization factor: {parallelization_factor:.2f}x")
+        log(f"Parallelization factor: {parallelization_factor:.2f}x")
     
-    print("="*80)
+    log("="*80)
+    log(f"Summary stored at {summary_log_path}")
+    summary_log.close()
 
 GENERAL_RUN_COUNT = 6
 
