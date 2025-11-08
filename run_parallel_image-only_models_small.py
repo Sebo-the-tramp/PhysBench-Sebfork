@@ -38,7 +38,7 @@ if result.returncode != 0:
 
 print("Check passed. Continuing with job execution...")
 
-JOBS = [
+JOBS_ALL = [
     {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
     {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
     {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
@@ -109,7 +109,9 @@ def run_one_experiment(run_name='default_run'):
     overall_start_time = datetime.now()
 
     # largest first: big per-GPU mem first, tie break by jobs that need more GPUs
+    JOBS = JOBS_ALL.copy()
     JOBS.sort(key=lambda j: (j['mb'], j['g']), reverse=True)
+    print("Total jobs to run:", len(JOBS))
 
     while JOBS or running:
         # reclaim finished
@@ -254,30 +256,30 @@ def main():
         #     "run_name": "run_06_soft",
         #     "quantity": "1K"
         # },
-        "1K_medium":{
-            "run_name": "run_06_medium",
-            "quantity": "1K"
-        },
+        # "1K_medium":{
+        #     "run_name": "run_06_medium",
+        #     "quantity": "1K"
+        # },
         "1K_stiff":{
             "run_name": "run_06_stiff",
             "quantity": "1K"
         },
-        # "1K_roi_circling":{
-        #     "run_name": "run_06_roi_circling",
-        #     "quantity": "1K"
-        # },
-        # "1K_masking":{
-        #     "run_name": "run_06_masking",
-        #     "quantity": "1K"
-        # },
-        # "1K_scene_context":{
-        #     "run_name": "run_06_scene_context",
-        #     "quantity": "1K"
-        # },
-        # "1K_textual_context":{
-        #     "run_name": "run_06_textual_context",
-        #     "quantity": "1K"
-        # }
+        "1K_roi_circling":{
+            "run_name": "run_06_roi_circling",
+            "quantity": "1K"
+        },
+        "1K_masking":{
+            "run_name": "run_06_masking",
+            "quantity": "1K"
+        },
+        "1K_scene_context":{
+            "run_name": "run_06_scene_context",
+            "quantity": "1K"
+        },
+        "1K_textual_context":{
+            "run_name": "run_06_textual_context",
+            "quantity": "1K"
+        }
     }
 
     for run_name, config in runs_config.items():

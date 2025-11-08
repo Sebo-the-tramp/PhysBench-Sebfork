@@ -20,7 +20,7 @@ RUN_NAME = 'run_05_10K'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
-JOBS = [
+JOBS_ALL = [
     # All these models are 'general' models
     {'model':'InternVL2-26B','g':2,'mb':40000,'mode':'general', 'size': 'big'},
     {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
@@ -93,6 +93,7 @@ def run_one_experiment(run_name='default_run'):
     overall_start_time = datetime.now()
 
     # largest first: big per-GPU mem first, tie break by jobs that need more GPUs
+    JOBS = JOBS_ALL.copy()
     JOBS.sort(key=lambda j: (j['mb'], j['g']), reverse=True)
 
     while JOBS or running:
@@ -232,31 +233,31 @@ def main():
     # we have a list of experiments with different run names
 
     runs_config = {
-        "10K_general":{
-            "run_name": "run_06_general",
-            "quantity": "10K"
+        # "10K_general":{
+        #     "run_name": "run_06_general",
+        #     "quantity": "10K"
+        # },
+        "1K_soft":{
+            "run_name": "run_06_1K_soft"
         },
-        # "1K_soft":{
-        #     "run_name": "run_06_1K_soft"
-        # },
-        # "1K_medium":{
-        #     "run_name": "run_06_1K_medium"
-        # },
-        # "1K_stiff":{
-        #     "run_name": "run_06_1K_stiff"
-        # },
-        # "1K_roi_circling":{
-        #     "run_name": "run_06_1K_roi_circling"
-        # },
-        # "1K_masking":{
-        #     "run_name": "run_06_1K_masking"
-        # },
-        # "1K_scene_context":{
-        #     "run_name": "run_06_1K_scene_context"
-        # },
-        # "1K_textual_context":{
-        #     "run_name": "run_06_1K_textual_context"
-        # }
+        "1K_medium":{
+            "run_name": "run_06_1K_medium"
+        },
+        "1K_stiff":{
+            "run_name": "run_06_1K_stiff"
+        },
+        "1K_roi_circling":{
+            "run_name": "run_06_1K_roi_circling"
+        },
+        "1K_masking":{
+            "run_name": "run_06_1K_masking"
+        },
+        "1K_scene_context":{
+            "run_name": "run_06_1K_scene_context"
+        },
+        "1K_textual_context":{
+            "run_name": "run_06_1K_textual_context"
+        }
     }
 
     for run_name, config in runs_config.items():
