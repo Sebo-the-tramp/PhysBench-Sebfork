@@ -298,10 +298,14 @@ def main():
         # }
     }
 
+    karo = ""
+    if os.path.exists("/home/it4i-thvu/seb_dev/computational_physics/PhysBench-Sebfork"):
+        karo="karo_"
 
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
-        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{config['quantity']}"
+        print(f"Starting experiment: {config['run_name']}")
+        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{karo}{config['quantity']}"
         run_one_experiment(run_name=run_name_and_path)
 
 if __name__ == '__main__':    

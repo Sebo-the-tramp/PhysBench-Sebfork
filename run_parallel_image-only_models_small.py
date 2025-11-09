@@ -248,10 +248,10 @@ def main():
     # we have a list of experiments with different run names
 
     runs_config = {
-        # "10K_general":{
-        #     "run_name": "run_06_general",
-        #     "quantity": "10K"
-        # },
+        "10K_general":{
+            "run_name": "run_06_general",
+            "quantity": "10K"
+        },
         # "1K_soft":{
         #     "run_name": "run_06_soft",
         #     "quantity": "1K"
@@ -260,32 +260,36 @@ def main():
         #     "run_name": "run_06_medium",
         #     "quantity": "1K"
         # },
-        "1K_stiff":{
-            "run_name": "run_06_stiff",
-            "quantity": "1K"
-        },
-        "1K_roi_circling":{
-            "run_name": "run_06_roi_circling",
-            "quantity": "1K"
-        },
-        "1K_masking":{
-            "run_name": "run_06_masking",
-            "quantity": "1K"
-        },
-        "1K_scene_context":{
-            "run_name": "run_06_scene_context",
-            "quantity": "1K"
-        },
-        "1K_textual_context":{
-            "run_name": "run_06_textual_context",
-            "quantity": "1K"
-        }
+        # "1K_stiff":{
+        #     "run_name": "run_06_stiff",
+        #     "quantity": "1K"
+        # },
+        # "1K_roi_circling":{
+        #     "run_name": "run_06_roi_circling",
+        #     "quantity": "1K"
+        # },
+        # "1K_masking":{
+        #     "run_name": "run_06_masking",
+        #     "quantity": "1K"
+        # },
+        # "1K_scene_context":{
+        #     "run_name": "run_06_scene_context",
+        #     "quantity": "1K"
+        # },
+        # "1K_textual_context":{
+        #     "run_name": "run_06_textual_context",
+        #     "quantity": "1K"
+        # }
     }
+
+    karo = ""
+    if os.path.exists("/home/it4i-thvu/seb_dev/computational_physics/PhysBench-Sebfork"):
+        karo="karo_"
 
     for run_name, config in runs_config.items():
         # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
         print(f"Starting experiment: {config['run_name']}")
-        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{config['quantity']}"
+        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{karo}{config['quantity']}"
         run_one_experiment(run_name=run_name_and_path)
 
 if __name__ == '__main__':    
