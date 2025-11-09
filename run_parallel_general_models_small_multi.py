@@ -56,6 +56,18 @@ JOBS_ALL = [
     {'model':'Mantis-8B-clip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
 ]
 
+# CPU limiting config
+CPU_PER_JOB = 12  # same number of logical CPUs per process
+CPU_IDS = list(range(os.cpu_count() or 1))
+
+def pick_cpus(free_set, n):
+    """Pick n free logical CPUs, or None if not enough."""
+    if len(free_set) < n:
+        return None
+    chosen = sorted(list(free_set))[:n]
+    return chosen
+
+
 def safe(name):
     return re.sub(r'[^A-Za-z0-9_.-]+','_', name)
 
@@ -99,6 +111,7 @@ def run_one_experiment(run_name='default_run'):
 
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
+    cpu_free = set(CPU_IDS)   # remaining free logical CPUs
     running = []
     completed_jobs = []       # track completed jobs with timing
     overall_start_time = datetime.now()
@@ -130,6 +143,7 @@ def run_one_experiment(run_name='default_run'):
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
+                cpu_free.update(r['cpus'])
                 r['log'].close()
                 running.remove(r)
 
@@ -142,23 +156,29 @@ def run_one_experiment(run_name='default_run'):
             if not devs:
                 i += 1
                 continue
-
+            # choose CPUs for this job
+            cpus = pick_cpus(cpu_free, CPU_PER_JOB)
+            if not cpus:
+                i += 1
+                continue
             env = os.environ.copy()
             env['PYTHONPATH'] = './'
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
-            cmd = make_cmd(job, run_name=run_name)
-            print("running the command:", ' '.join(cmd))
+            cmd = make_cmd(job, run_name=run_name)            
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
-            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
+            print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
+            final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
 
-            p = subprocess.Popen(cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
+            p = subprocess.Popen(final_cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
             for d in devs:
                 free[d] -= need
-            running.append({'p': p, 'devs': devs, 'log': logf, 'job': job, 'start_time': start_time})
+            for c in cpus:
+                cpu_free.discard(c)
+            running.append({'p': p, 'devs': devs, 'cpus': cpus, 'log': logf, 'job': job, 'start_time': start_time})
             JOBS.pop(i)
 
         time.sleep(0.3)
