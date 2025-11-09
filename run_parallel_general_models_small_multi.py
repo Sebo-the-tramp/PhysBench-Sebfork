@@ -170,6 +170,7 @@ def run_one_experiment(run_name='default_run'):
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
+            print("running command: PYTHONPATH=./ ", " ".join(cmd))
             print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
             final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
 
