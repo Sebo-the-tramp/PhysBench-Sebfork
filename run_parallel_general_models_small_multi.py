@@ -267,34 +267,34 @@ def main():
         #     "run_name": "run_06_general",
         #     "quantity": "10K"
         # },
-        "1K_soft":{
-            "run_name": "run_06_soft",
-            "quantity": "1K"
-        },
+        # "1K_soft":{
+        #     "run_name": "run_06_soft",
+        #     "quantity": "1K"
+        # },
         "1K_medium":{
             "run_name": "run_06_medium",
             "quantity": "1K"
         },
-        "1K_stiff":{
-            "run_name": "run_06_stiff",
-            "quantity": "1K"
-        },
-        "1K_roi_circling":{
-            "run_name": "run_06_roi_circling",
-            "quantity": "1K"
-        },
-        "1K_masking":{
-            "run_name": "run_06_masking",
-            "quantity": "1K"
-        },
-        "1K_scene_context":{
-            "run_name": "run_06_scene_context",
-            "quantity": "1K"
-        },
-        "1K_textual_context":{
-            "run_name": "run_06_textual_context",
-            "quantity": "1K"
-        }
+        # "1K_stiff":{
+        #     "run_name": "run_06_stiff",
+        #     "quantity": "1K"
+        # },
+        # "1K_roi_circling":{
+        #     "run_name": "run_06_roi_circling",
+        #     "quantity": "1K"
+        # },
+        # "1K_masking":{
+        #     "run_name": "run_06_masking",
+        #     "quantity": "1K"
+        # },
+        # "1K_scene_context":{
+        #     "run_name": "run_06_scene_context",
+        #     "quantity": "1K"
+        # },
+        # "1K_textual_context":{
+        #     "run_name": "run_06_textual_context",
+        #     "quantity": "1K"
+        # }
     }
 
 
