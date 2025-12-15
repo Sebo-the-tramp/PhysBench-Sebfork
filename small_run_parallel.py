@@ -4,6 +4,14 @@ from itertools import combinations
 from datetime import datetime, timedelta
 
 # config
+# DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
+SPLIT = 'val'
+
+# this should run on 8 A100-40GBs
+# GPUS = list(range(8))                    # physical GPU indices to use
+# GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
+
+# config
 DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
 GPUS = list(range(8))                    # physical GPU indices to use
@@ -12,17 +20,64 @@ RUN_NAME = 'run_05_10K'
 
 # jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
 # optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
-JOBS = [
+JOBS_ALL = [    
+    # The first few models are 'image-only' models that need to catch up from the 2 5090 that didn't fit
+    # actually better to move those models back to the small ones, as they finish faster there
+    {'model':'instructblip-flan-t5-xl','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    {'model':'instructblip-flan-t5-xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'instructblip-vicuna-7b','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    {'model':'instructblip-vicuna-13b','g':2,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'blip2-flant5xxl','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-1.5-7b-hf','g':1,'mb':16000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-1.5-13b-hf','g':1,'mb':30000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-v1.6-mistral-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    {'model':'llava-v1.6-vicuna-7b-hf','g':1,'mb':22000,'mode':'image-only', 'size': 'small'},
+    {'model':'deepseek1B','g':1,'mb':8000,'mode':'image-only', 'size': 'small'},
+    {'model':'deepseek7B','g':1,'mb':18000,'mode':'image-only', 'size': 'small'},
+    {'model':'Xinyuan-VL-2B','g':1,'mb':12000,'mode':'image-only', 'size': 'small'},
+    {'model':'Aquila-VL-2B','g':1,'mb':14000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2.5','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},
+    {'model':'MiniCPM-V2.6','g':1,'mb':19000,'mode':'image-only', 'size': 'small'},    
+    {'model':'Qwen-VL-Chat','g':1,'mb':20000,'mode':'image-only', 'size': 'small'},
+    {'model':'cambrian-8b','g':1,'mb':26000,'mode':'image-only', 'size': 'small'}, #, 'uv':['peft==0.17.1']
+    {'model':'paligemma2-3b','g':1,'mb':10000,'mode':'image-only', 'size': 'small'},
+    {'model':'paligemma2-10b','g':1,'mb':24000,'mode':'image-only', 'size': 'small'}, 
+    {'model':'InternVL-Chat-V1-5-quantable','g':1,'mb':40000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-1B','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-O','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+    {'model':'MolmoE-7B-D','g':1,'mb':38000,'mode':'image-only', 'size': 'small'},
+
     # All these models are 'general' models
-    {'model':'InternVL2-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2-40B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-    {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-    {'model':'InternVL2_5-26B','g':1,'mb':40000,'mode':'general', 'size': 'big'},
-    {'model':'InternVL2_5-38B','g':2,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-    {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+    {'model':'Phi-3-vision-128k-instruct','g':1,'mb':40000,'mode':'general', 'size': 'small'},
+    {'model':'Phi-3.5V','g':1,'mb':20000,'mode':'general', 'size': 'small'},        
+    {'model':'mPLUG-Owl3-1B-241014','g':1,'mb':12000,'mode':'general', 'size': 'small'},
+    {'model':'mPLUG-Owl3-2B-241014','g':1,'mb':16000,'mode':'general', 'size': 'small'},
+    {'model':'mPLUG-Owl3-7B-241101','g':1,'mb':22000,'mode':'general', 'size': 'small'},
+    {'model':'llava-interleave-qwen-7b-hf','g':1,'mb':23000,'mode':'general', 'size': 'small'},
+    {'model':'llava-interleave-qwen-7b-dpo-hf','g':1,'mb':23000,'mode':'general', 'size': 'small'},
+    {'model':'vila-1.5-3b','g':1,'mb':10000,'mode':'general', 'size': 'small'},
+    {'model':'vila-1.5-3b-s2','g':1,'mb':15000,'mode':'general', 'size': 'small'},
+    {'model':'vila-1.5-8b','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'vila-1.5-13b','g':1,'mb':31000,'mode':'general', 'size': 'small'},
+    {'model':'LLaVA-NeXT-Video-7B-DPO-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'LLaVA-NeXT-Video-7B-hf','g':1,'mb':20000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2-1B','g':1,'mb':5000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2-2B','g':1,'mb':13000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2-4B','g':1,'mb':16000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2-8B','g':1,'mb':29000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2_5-1B','g':1,'mb':8000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2_5-2B','g':1,'mb':13000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2_5-4B','g':1,'mb':16000,'mode':'general', 'size': 'small'},
+    {'model':'InternVL2_5-8B','g':1,'mb':29000,'mode':'general', 'size': 'small'},
+    {'model':'Mantis-8B-Idefics2','g':1,'mb':32000,'mode':'general', 'size': 'small'},
+    {'model':'Mantis-llava-7b','g':1,'mb':22000,'mode':'general', 'size': 'small'},
+    {'model':'Mantis-8B-siglip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
+    {'model':'Mantis-8B-clip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
 ]
+
 # CPU limiting config
-CPU_PER_JOB = 24  # same number of logical CPUs per process
+CPU_PER_JOB = 12  # same number of logical CPUs per process
 CPU_IDS = list(range(os.cpu_count() or 1))
 
 def pick_cpus(free_set, n):
@@ -39,14 +94,15 @@ def safe(name):
 def make_cmd(job, run_name):
     if run_name is None:
         raise ValueError("run_name must be provided to make_cmd")
-
+    
     base = [
         'python','eval/test_benchmark.py',
         '--model_name', job['model'],
         '--dataset_path', DATASET,
         '--split', SPLIT,
-        '--run_name', RUN_NAME
+        '--run_name', f"{run_name}"
     ]
+    print("run_name in make_cmd:", base)
     if job.get('extra'):
         base += job['extra']
     if job.get('uv'):
@@ -69,6 +125,10 @@ def pick(free, k, need):
     return list(best) if best else None
 
 def run_one_experiment(run_name='default_run'):
+
+    print("Starting experiment with run name:", run_name)
+    print()
+
     logs = pathlib.Path('logs'); logs.mkdir(exist_ok=True)
     free = GPU_MB[:]          # remaining MiB per GPU
     cpu_free = set(CPU_IDS)   # remaining free logical CPUs
@@ -77,6 +137,8 @@ def run_one_experiment(run_name='default_run'):
     overall_start_time = datetime.now()
 
     # largest first: big per-GPU mem first, tie break by jobs that need more GPUs
+
+    JOBS = JOBS_ALL.copy()
     JOBS.sort(key=lambda j: (j['mb'], j['g']), reverse=True)
 
     while JOBS or running:
@@ -101,9 +163,7 @@ def run_one_experiment(run_name='default_run'):
                 
                 for d in r['devs']:
                     free[d] += r['job']['mb']
-
                 cpu_free.update(r['cpus'])
-
                 r['log'].close()
                 running.remove(r)
 
@@ -116,35 +176,29 @@ def run_one_experiment(run_name='default_run'):
             if not devs:
                 i += 1
                 continue
-
             # choose CPUs for this job
             cpus = pick_cpus(cpu_free, CPU_PER_JOB)
             if not cpus:
                 i += 1
                 continue
-
             env = os.environ.copy()
             env['PYTHONPATH'] = './'
             env['CUDA_VISIBLE_DEVICES'] = ','.join(str(GPUS[d]) for d in devs)
 
-            cmd = make_cmd(job, run_name=run_name)
+            cmd = make_cmd(job, run_name=run_name)            
             ts = time.strftime('%Y%m%d_%H%M%S')
             logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
-            # print("AVAILABLE CPUS:", sorted(list(cpu_free)))
+            print("running command: PYTHONPATH=./ ", " ".join(cmd))
             print(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}, taskset CPUs {cpus}')
-
-            # run via taskset
             final_cmd = ['taskset', '-c', ','.join(map(str, cpus))] + cmd
 
             p = subprocess.Popen(final_cmd, stdout=logf, stderr=subprocess.STDOUT, env=env)
-
             for d in devs:
                 free[d] -= need
             for c in cpus:
                 cpu_free.discard(c)
-            
             running.append({'p': p, 'devs': devs, 'cpus': cpus, 'log': logf, 'job': job, 'start_time': start_time})
             JOBS.pop(i)
 
@@ -223,8 +277,7 @@ def run_one_experiment(run_name='default_run'):
     
     print("="*80)
 
-
-GENERAL_RUN_COUNT = 6
+GENERAL_RUN_COUNT = 10
 
 def main():
 
@@ -232,47 +285,20 @@ def main():
 
     runs_config = {
         "10K_general":{
-            "run_name": ""
+            "run_name": "run_10_general",
+            "quantity": "10K"
         },
-        "1K_soft":{
-            "run_name": ""
-        },
-        "1K_medium":{
-            "run_name": ""
-        },
-        "1K_stiff":{
-            "run_name": ""
-        },
-        "1K_slope_1":{
-            "run_name": "",
-            "additional_param": {"slope": 1}
-        },
-        "1K_slope_2":{
-            "run_name": "",
-            "additional_param": {"slope": 2}
-        },
-        "1K_slope_4":{
-            "run_name": "",
-            "additional_param": {"slope": 4}
-        },
-        "1K_roi_circling":{
-            "run_name": ""
-        },
-        "1K_masking":{
-            "run_name": ""
-        },
-        "1K_scene_context":{
-            "run_name": ""
-        },
-        "1K_textual_context":{
-            "run_name": ""
-        }
     }
 
+    karo = ""
+    if os.path.exists("/home/it4i-thvu/seb_dev/computational_physics/PhysBench-Sebfork"):
+        karo="karo_"
+
     for run_name, config in runs_config.items():
-        config["run_name"] = f"{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
-        print(f"Starting experiment: {run_name}")
-        # run_one_experiment(run_name=run_name, **config)
+        # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
+        print(f"Starting experiment: {config['run_name']}")
+        run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{karo}{config['quantity']}"
+        run_one_experiment(run_name=run_name_and_path)
 
 if __name__ == '__main__':    
     main()
