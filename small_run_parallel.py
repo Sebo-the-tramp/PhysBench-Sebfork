@@ -4,22 +4,15 @@ from itertools import combinations
 from datetime import datetime, timedelta
 
 # config
-# DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
-SPLIT = 'val'
-
-# this should run on 8 A100-40GBs
-# GPUS = list(range(8))                    # physical GPU indices to use
-# GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
-
-# config
 DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
 GPUS = list(range(8))                    # physical GPU indices to use
 GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
-RUN_NAME = 'run_05_10K'
 
-# jobs: model, g = number of GPUs, mb = per-GPU VRAM needed (MiB)
-# optional: uv = ['pkg==ver', ...], extra = ['--flag','value', ...]
+# CPU limiting config
+CPU_PER_JOB = 12  # same number of logical CPUs per process
+CPU_IDS = list(range(os.cpu_count() or 1))
+
 JOBS_ALL = [    
     # The first few models are 'image-only' models that need to catch up from the 2 5090 that didn't fit
     # actually better to move those models back to the small ones, as they finish faster there
@@ -76,9 +69,6 @@ JOBS_ALL = [
     {'model':'Mantis-8B-clip-llama3','g':1,'mb':35000,'mode':'general', 'size': 'small'},
 ]
 
-# CPU limiting config
-CPU_PER_JOB = 12  # same number of logical CPUs per process
-CPU_IDS = list(range(os.cpu_count() or 1))
 
 def pick_cpus(free_set, n):
     """Pick n free logical CPUs, or None if not enough."""
@@ -277,15 +267,11 @@ def run_one_experiment(run_name='default_run'):
     
     print("="*80)
 
-GENERAL_RUN_COUNT = 10
-
-def main():
-
-    # we have a list of experiments with different run names
+def main():    
 
     runs_config = {
-        "10K_general":{
-            "run_name": "run_10_general",
+        "11K_general":{
+            "run_name": "run_11_general",
             "quantity": "10K"
         },
     }
@@ -294,8 +280,7 @@ def main():
     if os.path.exists("/home/it4i-thvu/seb_dev/computational_physics/PhysBench-Sebfork"):
         karo="karo_"
 
-    for run_name, config in runs_config.items():
-        # config["run_name"] = f"run_{str(GENERAL_RUN_COUNT).zfill(2)}_{run_name}"
+    for run_name, config in runs_config.items():        
         print(f"Starting experiment: {config['run_name']}")
         run_name_and_path = f"{config['run_name']}/test_{config['run_name']}_{karo}{config['quantity']}"
         run_one_experiment(run_name=run_name_and_path)
