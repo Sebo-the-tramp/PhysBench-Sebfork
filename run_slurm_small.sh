@@ -14,7 +14,14 @@ curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
 
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
-python small_run_parallel.py
+RUN_NAME="runrun_11_general"
+QUANTITY="10K"
+MODEL_SIZE="small"
+
+python run_parallel.py \
+    --model-size "${MODEL_SIZE}" \
+    --run-name "${RUN_NAME}" \
+    --quantity "${QUANTITY}"
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
