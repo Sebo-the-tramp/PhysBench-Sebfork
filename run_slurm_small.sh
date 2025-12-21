@@ -18,4 +18,4 @@ python small_run_parallel.py
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="✅ GPU session completed for GENERAL_SMALL_MODELS on $(hostname) at $(date)" >/dev/null &
+     --data-urlencode text="✅ GPU session completed for GENERAL_SMALL_MODELS different CHMOD on $(hostname) at $(date)" >/dev/null &
