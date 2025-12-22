@@ -18,7 +18,7 @@ RUN_NAME="run_11_general_yms-variations"
 QUANTITY="10K"
 MODEL_SIZE="big"
 
-python run_parallel.py \
+python ../run_parallel.py \
     --model-size "${MODEL_SIZE}" \
     --run-name "${RUN_NAME}" \
     --quantity "${QUANTITY}"
