@@ -18,7 +18,7 @@ RUN_NAME="run_11_roi_circling_text"
 QUANTITY="1K"
 MODEL_SIZE="small"
 
-python ../run_parallel.py \
+python run_parallel.py \
     --model-size "${MODEL_SIZE}" \
     --run-name "${RUN_NAME}" \
     --quantity "${QUANTITY}"
