@@ -8,15 +8,15 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_11_counterfactual_smaller"
-QUANTITY="10K"
-MODEL_SIZE="small"
-
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="🚀 GPU session started for ${RUN_NAME} on $(hostname) at $(date)" >/dev/null &
+     --data-urlencode text="🚀 GPU session started for GENERAL_SMALL_MODELS on $(hostname) at $(date)" >/dev/null &
 
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
+
+RUN_NAME="run_11_ablation_baseline"
+QUANTITY="1K"
+MODEL_SIZE="small"
 
 python run_parallel.py \
     --model-size "${MODEL_SIZE}" \
@@ -25,4 +25,4 @@ python run_parallel.py \
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="✅ GPU session completed for ${RUN_NAME} on $(hostname) at $(date)" >/dev/null &
+     --data-urlencode text="✅ GPU session completed for GENERAL_SMALL_MODELS different CHMOD on $(hostname) at $(date)" >/dev/null &     
