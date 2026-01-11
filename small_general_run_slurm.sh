@@ -14,7 +14,7 @@ curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
 
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
-RUN_NAME="run_11_general"
+RUN_NAME="run_16_general"
 QUANTITY="10K"
 MODEL_SIZE="small"
 
