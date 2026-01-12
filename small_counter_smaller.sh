@@ -8,7 +8,7 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_11_counterfactual_smaller"
+RUN_NAME="run_16_counterfactual_smaller"
 QUANTITY="10K"
 MODEL_SIZE="small"
 
