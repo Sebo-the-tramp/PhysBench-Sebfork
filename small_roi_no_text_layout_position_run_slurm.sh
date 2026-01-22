@@ -14,8 +14,8 @@ curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
 
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
-RUN_NAME="run_12_roi_circling_no_text_layout_position"
-QUANTITY="1K"
+RUN_NAME="run_23_roi_circling_no_text_layout_position"
+QUANTITY="10K"
 MODEL_SIZE="small"
 
 python run_parallel.py \
