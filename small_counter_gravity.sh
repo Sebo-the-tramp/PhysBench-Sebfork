@@ -8,7 +8,7 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_16_counterfactual_gravity"
+RUN_NAME="run_25_counterfactual_gravity"
 QUANTITY="10K"
 MODEL_SIZE="small"
 
