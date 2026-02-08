@@ -11,6 +11,12 @@ jobs=(
   "small_no_roi_circling_yes_text_yes_layout_position_run_slurm.sh"
 )
 
+RUN_NUMBER="${1:-${RUN_NUMBER:-}}"
+sbatch_args=()
+if [[ -n "${RUN_NUMBER}" ]]; then
+  sbatch_args+=(--export=ALL,RUN_NUMBER="${RUN_NUMBER}")
+fi
+
 for job in "${jobs[@]}"; do
-  sbatch "${job}"
+  sbatch "${sbatch_args[@]}" "${job}"
 done

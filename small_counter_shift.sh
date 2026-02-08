@@ -8,7 +8,8 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_25_counterfactual_shift"
+RUN_NUMBER="${RUN_NUMBER:-25}"
+RUN_NAME="run_${RUN_NUMBER}_counterfactual_shift"
 QUANTITY="10K"
 MODEL_SIZE="small"
 
