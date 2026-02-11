@@ -14,7 +14,13 @@ curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
 
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
-RUN_NAME="run_26_roi_ablation_baseline"
+RUN_NUMBER="${1:-${RUN_NUMBER:-}}"
+if [[ -z "${RUN_NUMBER}" ]]; then
+  echo "RUN_NUMBER is required (arg1 or env)" >&2
+  exit 1
+fi
+RUN_NAME="run_${RUN_NUMBER}_roi_ablation_baseline"
+echo "Starting run ${RUN_NUMBER} (${RUN_NAME})"
 QUANTITY="10K"
 MODEL_SIZE="small"
 
