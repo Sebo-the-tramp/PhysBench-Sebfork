@@ -11,7 +11,10 @@ from datetime import datetime, timedelta
 # Defaults that can be overridden via CLI flags
 DATASET = '/mnt/proj1/eu-25-92/tiny_vqa_creation/output'
 SPLIT = 'val'
-GPUS = list(range(8))                    # physical GPU indices to use
+GPUS = (
+    [int(x) for x in os.getenv("GPUS", "").split(",") if x]
+    or list(range(8))
+)
 GPU_MB = [40960] * len(GPUS)             # per-GPU VRAM in MiB (edit if heterogeneous)
 
 JOB_SETS = {
