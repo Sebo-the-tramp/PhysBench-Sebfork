@@ -12,11 +12,11 @@ RUN_NUMBER="${RUN_NUMBER:-25}"
 RUN_NAME="run_${RUN_NUMBER}_counterfactual_smaller"
 QUANTITY="10K"
 MODEL_SIZE="small"
+SCRIPT_NAME="$(basename "$0")"
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="🚀 GPU session started for ${RUN_NAME} on $(hostname) at $(date)" >/dev/null &
-
+     --data-urlencode text="🚀 ${SCRIPT_NAME} started on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE} | RUN_NUMBER=${RUN_NUMBER}" >/dev/null &
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
 python run_parallel.py \
@@ -26,4 +26,5 @@ python run_parallel.py \
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="✅ GPU session completed for ${RUN_NAME} on $(hostname) at $(date)" >/dev/null &
+     --data-urlencode text="✅ ${SCRIPT_NAME} completed on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE} | RUN_NUMBER=${RUN_NUMBER}" >/dev/null &
+

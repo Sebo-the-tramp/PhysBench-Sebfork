@@ -8,21 +8,19 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-     -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="🚀 GPU session started for GENERAL_SMALL_MODELS on $(hostname) at $(date)" >/dev/null &
-
-source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
-
 RUN_NUMBER="${1:-${RUN_NUMBER:-}}"
 if [[ -z "${RUN_NUMBER}" ]]; then
-  echo "RUN_NUMBER is required (arg1 or env)" >&2
   exit 1
 fi
 RUN_NAME="run_${RUN_NUMBER}_roi_circling_text_layout_position"
-echo "Starting run ${RUN_NUMBER} (${RUN_NAME})"
 QUANTITY="10K"
 MODEL_SIZE="small"
+SCRIPT_NAME="$(basename "$0")"
+
+curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+     -d chat_id="${TELEGRAM_CHAT_ID}" \
+     --data-urlencode text="🚀 ${SCRIPT_NAME} started on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE} | RUN_NUMBER=${RUN_NUMBER}" >/dev/null &
+source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
 python run_parallel.py \
     --model-size "${MODEL_SIZE}" \
@@ -31,4 +29,5 @@ python run_parallel.py \
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
-     --data-urlencode text="✅ GPU session completed for GENERAL_SMALL_MODELS different CHMOD on $(hostname) at $(date)" >/dev/null &     
+     --data-urlencode text="✅ ${SCRIPT_NAME} completed on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE} | RUN_NUMBER=${RUN_NUMBER}" >/dev/null &
+
