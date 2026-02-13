@@ -151,7 +151,8 @@ def run_one_experiment(run_name, jobs, cpu_per_job, dataset, split):
     log(f"Summary log: {summary_log_path}")
     log()
     free = GPU_MB[:]          # remaining MiB per GPU
-    cpu_ids = list(range(os.cpu_count() or 1))
+    # cpu_ids = list(range(os.cpu_count() or 1))
+    cpu_ids = sorted(os.sched_getaffinity(0))
     cpu_free = set(cpu_ids)   # remaining free logical CPUs
     running = []
     completed_jobs = []       # track completed jobs with timing
