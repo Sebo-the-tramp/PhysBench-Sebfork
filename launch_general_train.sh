@@ -17,11 +17,12 @@ fi
 RUN_NAME="${RUN_NAME:-run_${RUN_NUMBER}_general}"
 
 for i in $(seq 1 "${MAX_SLICES}"); do
-  QUANTITY="${QUANTITY_BASE}K_${i}"
+  SLICE_NUMBER="${i}"
+  QUANTITY="${QUANTITY_BASE}K"
   SLICE_JSON="${OUTPUT_ROOT}/${RUN_NAME}/test_${RUN_NAME}_karo_${QUANTITY}.json"
   if [[ ! -f "${SLICE_JSON}" ]]; then
     echo "skip missing: ${SLICE_JSON}" >&2
     continue
   fi
-  sbatch "${JOB_SCRIPT}" "${RUN_NUMBER}" "${QUANTITY}"
+  sbatch "${JOB_SCRIPT}" "${RUN_NUMBER}" "${QUANTITY}" "${SLICE_NUMBER}"
 done

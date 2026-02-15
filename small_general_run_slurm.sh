@@ -10,13 +10,19 @@ source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
 RUN_NUMBER="${1:-}"
 QUANTITY="${2:-}"
+SLICE_NUMBER="${3:-}"
 MODEL_SIZE="small"
 
 if [[ -z "${RUN_NUMBER}" || -z "${QUANTITY}" ]]; then
     exit 1
 fi
 
-RUN_NAME="run_${RUN_NUMBER}_general"
+if [ -n "$SLICE_NUMBER" ]; then
+  RUN_NAME="run_${RUN_NUMBER}_general-${SLICE_NUMBER}"
+else
+  RUN_NAME="run_${RUN_NUMBER}_general"
+fi
+
 SCRIPT_NAME="$(basename "$0")"
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
