@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Config (override via env)
-JOB_SCRIPT="${JOB_SCRIPT:-small_general_run_slurm.sh}"
+JOB_SCRIPT="${JOB_SCRIPT:-big_general_run_slurm.sh}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-/mnt/proj1/eu-25-92/tiny_vqa_creation/output}"
 
 RUN_NUMBER="${1:-}"
