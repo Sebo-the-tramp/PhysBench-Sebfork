@@ -150,7 +150,11 @@ class PhysionBenchEvaluator():
 
 		# with open(self.dataset_path +r'/test.json', 'r', encoding='utf-8') as file:
 		print("[Info] Loading dataset from: ", self.dataset_path + f'/{run_name}.json')
-		with open(self.dataset_path + f'/{run_name}.json', 'r', encoding='utf-8') as file:
+		# run_name = run_28_general-3/test_run_28_general-3_karo_10K.json e.g
+
+		run_name_slice_compatible = run_name.split('/')[0].split('-')[0] + run_name.split('/')[1] 
+		# with open(self.dataset_path + f'/{run_name}.json', 'r', encoding='utf-8') as file: -> before
+		with open(self.dataset_path + f'/{run_name_slice_compatible}.json', 'r', encoding='utf-8') as file:	
 			dataset = json.load(file)
 
 		if self.split == 'val':
