@@ -18,7 +18,7 @@ RUN_NAME="${RUN_NAME:-run_${RUN_NUMBER}_general}"
 
 for i in $(seq 1 "${MAX_SLICES}"); do
   QUANTITY="${QUANTITY_BASE}_${i}"
-  SLICE_JSON="${OUTPUT_ROOT}/${RUN_NAME}/test_${RUN_NAME}_${QUANTITY}.json"
+  SLICE_JSON="${OUTPUT_ROOT}/${RUN_NAME}/test_${RUN_NAME}_karo_${QUANTITY}.json"
   if [[ ! -f "${SLICE_JSON}" ]]; then
     echo "skip missing: ${SLICE_JSON}" >&2
     continue
