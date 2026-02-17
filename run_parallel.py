@@ -187,6 +187,12 @@ def run_one_experiment(run_name, jobs, cpu_per_job, dataset, split):
                     free[d] += r['job']['mb']
                 cpu_free.update(r['cpus'])
                 r['log'].close()
+                # New code:
+                # try:
+                #     r['log'].close()
+                # except OSError as e:
+                #     # Print a warning but keep the program alive
+                #     print(f"Warning: Could not cleanly close log file. Error: {e}")                    
                 running.remove(r)
 
         # launch what fits
