@@ -133,10 +133,12 @@ def pick(free, k, need):
 
 
 def run_one_experiment(run_name, jobs, cpu_per_job, dataset, split):
-    logs = pathlib.Path('logs')
-    logs.mkdir(exist_ok=True)
+    logs_root = pathlib.Path('logs')
+    logs_root.mkdir(exist_ok=True)
+    run_dir = logs_root / safe(run_name)
+    run_dir.mkdir(parents=True, exist_ok=True)
     summary_stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    summary_log_path = logs / f'{summary_stamp}_{safe(run_name)}_summary.log'
+    summary_log_path = run_dir / f'{summary_stamp}_summary.log'
     summary_log = open(summary_log_path, 'w')
 
     def log(msg='', end='\n'):
@@ -208,7 +210,7 @@ def run_one_experiment(run_name, jobs, cpu_per_job, dataset, split):
             cmd = make_cmd(job, run_name=run_name, dataset=dataset, split=split)
             log("running the command: " + ' '.join(cmd))
             ts = time.strftime('%Y%m%d_%H%M%S')
-            logf = open(logs / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
+            logf = open(run_dir / f'{ts}_{safe(job["model"])}_g{k}.log', 'w')
 
             start_time = datetime.now()
             log(f'Starting: {job["model"]} at {start_time.strftime("%H:%M:%S")} on GPUs {env["CUDA_VISIBLE_DEVICES"]}')
