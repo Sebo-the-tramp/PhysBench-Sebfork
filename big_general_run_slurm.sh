@@ -18,7 +18,7 @@ if [[ -z "${RUN_NUMBER}" || -z "${QUANTITY}" ]]; then
 fi
 
 if [ -n "$SLICE_NUMBER" ]; then
-  RUN_NAME="run_${RUN_NUMBER}_general_10K-${SLICE_NUMBER}"
+  RUN_NAME="run_${RUN_NUMBER}_general-${SLICE_NUMBER}"
 else
   RUN_NAME="run_${RUN_NUMBER}_general"
 fi
