@@ -30,7 +30,7 @@ curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      --data-urlencode text="🚀 ${SCRIPT_NAME} started on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE} | RUN_NUMBER=${RUN_NUMBER}" >/dev/null &
 source /mnt/proj1/eu-25-92/physbench/.venv/bin/activate
 
-python run_parallel.py \
+python run_parallel_tmp.py \
     --model-size "${MODEL_SIZE}" \
     --run-name "${RUN_NAME}" \
     --quantity "${QUANTITY}"

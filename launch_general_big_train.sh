@@ -26,4 +26,7 @@ for i in $(seq "${START_SLICE}" "${MAX_SLICES}"); do
     continue
   fi
   sbatch "${JOB_SCRIPT}" "${RUN_NUMBER}" "${QUANTITY}" "${SLICE_NUMBER}"
+  DELAY_SECONDS=$((30 + RANDOM % 31))
+  echo "sleeping ${DELAY_SECONDS}s before next launch..."
+  sleep "${DELAY_SECONDS}"
 done

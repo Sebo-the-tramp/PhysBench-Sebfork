@@ -21,12 +21,12 @@ JOB_SETS = {
     'big': {
         'cpu_per_job': 24,
         'jobs': [
-            # {'model': 'InternVL2-26B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big'},
-            # {'model': 'InternVL2-40B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big', 'uv': ['transformers==4.57.1']},
-            {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
-            # {'model': 'InternVL2_5-26B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big'},
-            # {'model': 'InternVL2_5-38B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big', 'uv': ['transformers==4.57.1']},
-            {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+            {'model': 'InternVL2-26B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big'},
+            {'model': 'InternVL2-40B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big', 'uv': ['transformers==4.57.1']},
+            # {'model':'InternVL2-76B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+            {'model': 'InternVL2_5-26B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big'},
+            {'model': 'InternVL2_5-38B', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big', 'uv': ['transformers==4.57.1']},
+            # {'model':'InternVL2_5-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
             
             # note I started only the first 4 of the huge models, while the first 6 are queued and running
             
