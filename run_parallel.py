@@ -49,7 +49,7 @@ JOB_SETS = {
             # {'model': 'Xinyuan-VL-2B', 'g': 1, 'mb': 12000, 'mode': 'image-only', 'size': 'small'},
             # {'model': 'Aquila-VL-2B', 'g': 1, 'mb': 14000, 'mode': 'image-only', 'size': 'small'},
             # {'model': 'MiniCPM-V2', 'g': 1, 'mb': 10000, 'mode': 'image-only', 'size': 'small'},
-            {'model': 'MiniCPM-V2.5', 'g': 1, 'mb': 19000, 'mode': 'image-only', 'size': 'small'},
+            # {'model': 'MiniCPM-V2.5', 'g': 1, 'mb': 19000, 'mode': 'image-only', 'size': 'small'},
             # {'model': 'MiniCPM-V2.6', 'g': 1, 'mb': 19000, 'mode': 'image-only', 'size': 'small'},
             # {'model': 'Qwen-VL-Chat', 'g': 1, 'mb': 20000, 'mode': 'image-only', 'size': 'small'},
             # {'model': 'cambrian-8b', 'g': 1, 'mb': 26000, 'mode': 'image-only', 'size': 'small'},
