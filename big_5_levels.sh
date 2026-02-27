@@ -3,14 +3,14 @@
 #SBATCH -p qgpu
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=8
-#SBATCH -t 12:00:00
+#SBATCH -t 3:00:00
 #SBATCH -J interactive_gpu
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_11_general_levels"
+RUN_NAME="run_28_general_levels"
 QUANTITY="5K"
-MODEL_SIZE="small"
+MODEL_SIZE="big"
 SCRIPT_NAME="$(basename "$0")"
 
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
