@@ -8,7 +8,7 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_24_general_yms-variations"
+RUN_NAME="run_24_general_yms_variations"
 QUANTITY="10K"
 MODEL_SIZE="big"
 SCRIPT_NAME="$(basename "$0")"
