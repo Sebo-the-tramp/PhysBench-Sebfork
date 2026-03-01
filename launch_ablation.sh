@@ -2,7 +2,7 @@
 set -euo pipefail
 
 jobs=(
-  "small_ablation_no_object_run_slurm.sh"
+  # "small_ablation_no_object_run_slurm.sh"
   # "small_roi_baseline_run_slurm.sh"
   # "small_roi_no_text_run_slurm.sh"
   # "small_roi_text_run_slurm.sh"
