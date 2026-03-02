@@ -8,7 +8,7 @@
 
 source "/home/it4i-thvu/seb_dev/.telegram_bot.env"
 
-RUN_NAME="run_24_general_levels"
+RUN_NAME="run_26_general_levels"
 QUANTITY="5K"
 MODEL_SIZE="small"
 SCRIPT_NAME="$(basename "$0")"
