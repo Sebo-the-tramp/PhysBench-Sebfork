@@ -59,7 +59,7 @@ imageqa_models = {
 	"MolmoE-7B-D"						   : ("MolmoE", 		 "allenai/Molmo-7B-D-0924"),
 
 	# adding Molmo2
-	"Molmo2-8B"							   : ("MolmoE", 		 "allenai/Molmo2-8B"),
+	"Molmo2-8B"							   : ("Molmo2", 		 "allenai/Molmo2-8B"),
 
 	"InternVL2-1B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-1B'),
 	"InternVL2-2B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-2B'),
@@ -266,6 +266,59 @@ class MolmoE(QAModelInstance):
 			device_map='auto'
 		)
 		self.model = AutoModelForCausalLM.from_pretrained(
+			ckpt,
+			trust_remote_code=True,
+			torch_dtype='auto',
+			device_map='auto'
+		).to(model_precision).eval()
+		self.model_precision = model_precision
+
+	def qa(self, image, prompt):
+		try:
+			from transformers import GenerationConfig
+			if isinstance(image, str):
+				image = Image.open(image).convert('RGB')
+			print(prompt)
+			inputs = self.processor.process(
+				images=[image],
+				text= prompt.replace('<image>\n', '')
+			)
+			# move inputs to the correct device and make a batch of size 1
+			# generate output; maximum 200 new tokens; stop generation when <|endoftext|> is generated
+			inputs = {k: v.to(self.model.device).unsqueeze(0) for k, v in inputs.items()}
+
+			output = self.model.generate_from_batch(
+				inputs,
+				GenerationConfig(max_new_tokens=200, stop_strings="<|endoftext|>"),
+				tokenizer=self.processor.tokenizer
+			)
+
+			# only get generated tokens; decode them to text
+			generated_tokens = output[0, inputs['input_ids'].size(1):]
+			generated_text = self.processor.tokenizer.decode(generated_tokens, skip_special_tokens=True)
+
+			generated_text= generated_text.replace(' ', '', 1)  # remove the first ' '
+			cprint(generated_text, 'cyan')
+
+			return generated_text
+		except:
+			cprint("nonono", 'cyan')
+			return None
+		
+class Molmo2(QAModelInstance):
+	def __init__(self, ckpt="allenai/MolmoE-1B-0924", torch_device=torch.device("cuda"), model_precision=torch.float32):
+		# 🔥 only support float32
+		# https://huggingface.co/allenai/MolmoE-1B-0924/discussions/12
+		# change torch_dtype will lead to error
+		model_precision = torch.float32
+		from transformers import AutoModelForImageTextToText, AutoProcessor
+		self.processor = AutoProcessor.from_pretrained(
+			ckpt,
+			trust_remote_code=True,
+			torch_dtype='auto',
+			device_map='auto'
+		)
+		self.model = AutoModelForImageTextToText.from_pretrained(
 			ckpt,
 			trust_remote_code=True,
 			torch_dtype='auto',

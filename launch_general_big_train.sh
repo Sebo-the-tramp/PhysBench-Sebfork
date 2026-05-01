@@ -30,3 +30,7 @@ for i in $(seq "${START_SLICE}" "${MAX_SLICES}"); do
   echo "sleeping ${DELAY_SECONDS}s before next launch..."
   sleep "${DELAY_SECONDS}"
 done
+
+
+# example usage:
+# ./launch_general_big_train.sh 28 10 1 0

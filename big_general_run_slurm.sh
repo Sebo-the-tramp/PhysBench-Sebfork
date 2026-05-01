@@ -38,3 +38,6 @@ python run_parallel_tmp.py \
 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
      -d chat_id="${TELEGRAM_CHAT_ID}" \
      --data-urlencode text="✅ ${SCRIPT_NAME} completed on $(hostname) at $(date) | RUN_NAME=${RUN_NAME} | QUANTITY=${QUANTITY} | MODEL_SIZE=${MODEL_SIZE}" >/dev/null &
+
+# running example: 
+# python run_parallel_tmp.py --model-size big --run-name 28 --quantity 10K

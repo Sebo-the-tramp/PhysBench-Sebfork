@@ -31,7 +31,7 @@ JOB_SETS = {
             # note I started only the first 4 of the huge models, while the first 6 are queued and running
             # Those are the last 3 new models we should expect of runnning!
             {"model":'Molmo2-8B', 'g': 3, 'mb': 40000, 'mode': 'general', 'size': 'big', 'uv': ['transformers==4.57.1']},
-            {'model':'InternVL3-78B','g':3,'mb':40000,'mode':'general', 'size': 'big', 'uv':['transformers==4.57.1']},
+            {'model':'InternVL3-78B','g':4,'mb':40000,'mode':'general', 'size': 'big'},
             # {'model':'Gemma-4-31B-it', 'g': 2, 'mb': 40000, 'mode': 'general', 'size': 'big'},
 
             
