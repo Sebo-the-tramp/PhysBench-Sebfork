@@ -37,7 +37,7 @@ task_split = {
     "MolmoE-1B"                            : "image-only",
     "MolmoE-7B-O"                          : "image-only",
     "MolmoE-7B-D"                          : "image-only",
-	
+
 	"Molmo2-8B"                            : "image-only", # need double check for images too
 
     "claude-3-5-sonnet"                    : "image-only",
@@ -236,7 +236,7 @@ class PhysionBenchEvaluator():
 								"claude-3-5-sonnet", "claude-3-sonnet", "claude-3-opus", "claude-3-haiku",
 								'MiniCPM-V2', 'MiniCPM-V2.5', 'MiniCPM-V2.6',
 								'Xinyuan-VL-2B', 'Aquila-VL-2B', 'deepseek1B', 'deepseek7B', 'paligemma2-3b',
-								'paligemma2-10b', 'MolmoE-1B', 'MolmoE-7B-O', 'MolmoE-7B-D',
+								'paligemma2-10b', 'MolmoE-1B', 'MolmoE-7B-O', 'MolmoE-7B-D', 'Molmo2-8B',
 								'allenai/Molmo-72B-0924']:
 				if visuals[0].endswith('.mp4'):
 					combined_image = self._concat_video(visuals[0])
@@ -285,7 +285,7 @@ class PhysionBenchEvaluator():
 			elif self.model_name in ['InternVL2-26B', 'InternVL2-40B',
 									 'InternVL2-76B',
 									 'InternVL2_5-26B', 'InternVL2_5-38B',
-									 'InternVL2_5-78B']:
+									 'InternVL2_5-78B', 'InternVL3-78B']:
 				gt_ind = None
 				combined_image = None
 				for index in range(len(visuals)):
