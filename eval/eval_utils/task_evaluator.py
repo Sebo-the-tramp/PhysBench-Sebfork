@@ -37,6 +37,9 @@ task_split = {
     "MolmoE-1B"                            : "image-only",
     "MolmoE-7B-O"                          : "image-only",
     "MolmoE-7B-D"                          : "image-only",
+	
+	"Molmo2-8B"                            : "image-only", # need double check for images too
+
     "claude-3-5-sonnet"                    : "image-only",
     "claude-3-sonnet"                      : "image-only",
     "claude-3-opus"                        : "image-only",
@@ -84,6 +87,8 @@ task_split = {
     'InternVL2_5-26B'                     : "general",
     'InternVL2_5-38B'                     : "general",
     'InternVL2_5-78B'                     : "general",
+	'InternVL3-78B'						  : "general",
+
     "gpt4v"                               : "general",
     "gpt4o"                               : "general",
     "o1"                             	  : "general",
