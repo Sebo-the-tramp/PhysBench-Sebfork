@@ -144,6 +144,31 @@ def split_model_25(model_name):
 
     return device_map
 
+def split_model_3(model_name):
+    device_map = {}
+    world_size = torch.cuda.device_count()
+    num_layers = {
+        'InternVL3-78B': 80}[model_name]
+    # Since the first GPU will be used for ViT, treat it as half a GPU.
+    num_layers_per_gpu = math.ceil(num_layers / (world_size - 0.5))
+    num_layers_per_gpu = [num_layers_per_gpu] * world_size
+    num_layers_per_gpu[0] = math.ceil(num_layers_per_gpu[0] * 0.5)
+    layer_cnt = 0
+    for i, num_layer in enumerate(num_layers_per_gpu):
+        for j in range(num_layer):
+            device_map[f'language_model.model.layers.{layer_cnt}'] = i
+            layer_cnt += 1
+    device_map['vision_model'] = 0
+    device_map['mlp1'] = 0
+    device_map['language_model.model.tok_embeddings'] = 0
+    device_map['language_model.model.embed_tokens'] = 0
+    device_map['language_model.output'] = 0
+    device_map['language_model.model.norm'] = 0
+    device_map['language_model.lm_head'] = 0
+    device_map[f'language_model.model.layers.{num_layers - 1}'] = 0
+
+    return device_map
+
 def build_transform(input_size):
     MEAN, STD = IMAGENET_MEAN, IMAGENET_STD
     transform = T.Compose([
@@ -216,6 +241,8 @@ def load_image(image_file, input_size=448, max_num=12):
 
 class InternVLChat2():
     def __init__(self, ckpt="OpenGVLab/InternVL2-1B"):
+        if 'InternVL3' in ckpt:
+            device_map = split_model_3(ckpt.split('/')[-1])  # note: this may need to be changed
         if '2_5' in ckpt:
             device_map = split_model_25(ckpt.split('/')[-1])  # note: this may need to be changed
         else:

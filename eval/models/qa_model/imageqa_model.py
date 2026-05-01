@@ -57,6 +57,10 @@ imageqa_models = {
 	"MolmoE-1B"							   : ("MolmoE", 		 "allenai/MolmoE-1B-0924"),
 	"MolmoE-7B-O"						   : ("MolmoE", 		 "allenai/Molmo-7B-O-0924"),
 	"MolmoE-7B-D"						   : ("MolmoE", 		 "allenai/Molmo-7B-D-0924"),
+
+	# adding Molmo2
+	"Molmo2-8B"							   : ("MolmoE", 		 "allenai/Molmo2-8B"),
+
 	"InternVL2-1B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-1B'),
 	"InternVL2-2B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-2B'),
 	"InternVL2-4B"						   : ("InternVLChat2",   'OpenGVLab/InternVL2-4B'),
@@ -71,6 +75,13 @@ imageqa_models = {
 	"InternVL2_5-26B"					   : ("InternVLChat2",   'OpenGVLab/InternVL2_5-26B'),
 	"InternVL2_5-38B"				       : ("InternVLChat2",   'OpenGVLab/InternVL2_5-38B'),
 	"InternVL2_5-78B"		   			   : ("InternVLChat2",   'OpenGVLab/InternVL2_5-78B'),
+
+	# Adding InternVL3 
+	"InternVL3-78B"					       : ("InternVLChat2",   'OpenGVLab/InternVL3-78B'),
+
+	# Adding gemma4 -> no idea if it will run...
+	"Gemma-4-31B-it"		   			   : ("Gemma4", 		 "google/gemma-4-31b-it"),
+
     "Mantis-8B-Idefics2"                   : ("Mantis", 		 "TIGER-Lab/Mantis-8B-Idefics2"),  # pip install git+https://github.com/TIGER-AI-Lab/Mantis.git
     "Mantis-llava-7b"                      : ("Mantis", 		 "TIGER-Lab/Mantis-llava-7b"),	   # pip install git+https://github.com/TIGER-AI-Lab/Mantis.git
     "Mantis-8B-siglip-llama3"              : ("Mantis", 		 "TIGER-Lab/Mantis-8B-siglip-llama3"), # pip install git+https://github.com/TIGER-AI-Lab/Mantis.git
@@ -407,6 +418,41 @@ class PaliGemma2(QAModelInstance):
 			decoded = self.processor.decode(generation, skip_special_tokens=True)
 			cprint(decoded, 'cyan')
 			return decoded
+		
+
+class Gemma4(QAModelInstance):
+	def __init__(self, ckpt="google/gemma-4-31b-it", torch_device=torch.device("cuda"), model_precision=torch.float32):
+		from transformers import AutoProcessor, AutoModelForMultimodalLM
+
+		self.model = AutoModelForMultimodalLM.from_pretrained(
+			ckpt,
+			dtype=torch.bfloat16,
+			device_map="auto"
+		)
+
+		self.processor = AutoProcessor.from_pretrained(ckpt)
+
+
+	def qa(self, image, prompt):
+		from transformers.image_utils import load_image
+		if isinstance(image, Image.Image):
+			# Check if the image is a PIL.Image object and save to a temporary file if so
+			with tempfile.NamedTemporaryFile(delete=True, suffix=".png") as tmp:
+				image.save(tmp.name)
+				image_path = tmp.name
+		else:
+			image_path = image
+		image = load_image(image_path)
+		model_inputs = self.processor.apply_chat_template(
+			prompt.replace('<image>\n', '') + 'Answer: ',
+			images=image,
+			tokenize=True,
+			return_dict=True,
+			return_tensors="pt",
+			add_generation_prompt=True,
+		).to(self.model.device)
+
+		model_inputs = self.processor(text=prompt.replace('<image>\n', '') + 'Answer: ', images=image, return_tensors="pt")
 
 class LLaVAVideo(QAModelInstance):
 	def __init__(self, ckpt="llava-hf/LLaVA-NeXT-Video-7B-hf", torch_device=torch.device("cuda"), model_precision=torch.float32):
@@ -1107,7 +1153,8 @@ class InternVLChat2(QAModelInstance):
 			'InternVL2-1B': 24, 'InternVL2-2B': 24, 'InternVL2-4B': 32, 'InternVL2-8B': 32,
 			'InternVL2-26B': 48, 'InternVL2-40B': 60, 'InternVL2-Llama3-76B': 80,
 			'InternVL2_5-1B': 24, 'InternVL_5-2B': 24, 'InternVL2_5-4B': 36, 'InternVL2_5-8B': 32,
-			'InternVL2_5-26B': 48, 'InternVL2_5-38B': 64, 'InternVL2_5-78B': 80
+			'InternVL2_5-26B': 48, 'InternVL2_5-38B': 64, 'InternVL2_5-78B': 80,
+			"InternVL3-78B": 80
 		}[model_name]
 		# Since the first GPU will be used for ViT, treat it as half a GPU.
 		num_layers_per_gpu = math.ceil(num_layers / (world_size - 0.5))
